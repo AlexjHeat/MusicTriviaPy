@@ -1,0 +1,15 @@
+{
+    "files": [
+        "categorydialog.py",
+        "config.py",
+        "controlwindow.py",
+        "controlwindow.ui",
+        "db.py",
+        "displaywindow.py",
+        "displaywindow.ui",
+        "listmodels.py",
+        "main.py",
+        "musictrivia.db",
+        "playlistmanager.py"
+    ]
+}
