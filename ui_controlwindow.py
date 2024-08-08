@@ -245,6 +245,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_8)
 
+        self.playButton = QPushButton(self.centralwidget)
+        self.playButton.setObjectName(u"playButton")
+        self.playButton.setGeometry(QRect(700, 290, 75, 24))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -283,6 +286,7 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Artist", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.songStartTimeEdit.setText("")
+        self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Category", None))
     # retranslateUi
 

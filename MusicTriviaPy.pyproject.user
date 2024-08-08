@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 11.0.3, 2024-03-04T08:39:23. -->
+<!-- Written by QtCreator 12.0.2, 2024-07-18T21:42:57. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -37,6 +37,7 @@
    <value type="bool" key="EditorConfiguration.MouseHiding">true</value>
    <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
    <value type="int" key="EditorConfiguration.PaddingMode">1</value>
+   <value type="int" key="EditorConfiguration.PreferAfterWhitespaceComments">0</value>
    <value type="bool" key="EditorConfiguration.PreferSingleLineComments">false</value>
    <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
    <value type="bool" key="EditorConfiguration.ShowMargin">false</value>
@@ -137,6 +138,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/QtProjects/MusicTriviaPy/main.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/QtProjects/MusicTriviaPy/main.py</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">D:\QtProjects\MusicTriviaPy\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -150,6 +152,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">WebAssembly.RunConfiguration.EmrunD:/QtProjects/MusicTriviaPy/main.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/QtProjects/MusicTriviaPy/main.py</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="WASM.WebBrowserSelectionAspect.Browser"></value>

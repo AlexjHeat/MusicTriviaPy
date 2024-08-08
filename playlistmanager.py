@@ -1,9 +1,9 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtCore import Qt, QModelIndex, QFileInfo, QStringListModel
+from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category
+from db import Session, Song, Category, FilePath
 from listmodels import CategoryListModel, SongListModel
 from categorydialog import CategoryDialog
 from config import defaultCategory as default
@@ -117,10 +117,10 @@ class PlaylistManager:
             return True
         return False
 
-    def setActiveSong(self, index:QModelIndex, songInModel:bool):
+    def setActiveSong(self, index:QModelIndex, isSongIn:bool):
         if not index.isValid():
             return None
-        if songInModel:
+        if isSongIn:
             self.activeSongModel = self.songsInModel
         else:
             self.activeSongModel = self.songsOutModel
@@ -148,17 +148,29 @@ class PlaylistManager:
         return True
 
     def addSongs(self, parent):
-        filePaths, filter = QFileDialog().getOpenFileNames(parent, "Select song files to add", ".", "multimedia(*.wav *.mp3 *.mp4 *.m4a *.flac)")
+        files, filter = QFileDialog().getOpenFileNames(parent, "Select song files to add", ".", "multimedia(*.wav *.mp3 *.mp4 *.m4a *.flac)")
         #Check if file already exists in playlist, then add default category to each song if a default category is set
         session = Session()
         default_cat = session.query(Category).filter(Category.name == default).one()
-        for filePath in filePaths:
-            file = QFileInfo(filePath).fileName()
-            song = Song(file=file)
-            if session.query(Song).filter(Song.file == file).scalar() == None:
+        pathChecked = False
+        for file in files:
+            file = QFileInfo(file)
+
+            #Add song to database, if file name does not already exist
+            name = file.fileName()
+            if session.query(Song).filter(Song.fileName == name).scalar() == None:
+                song = Song(fileName=name)
                 session.add(song)
                 if default_cat:
                     song.categories.append(default_cat)
+
+            #Add file path to database, if it does not already exist
+            if pathChecked == False:
+                path = file.absolutePath()
+                if session.query(FilePath).filter(FilePath.path == path).scalar() == None:
+                    filePath = FilePath(path=path)
+                    session.add(filePath)
+                pathChecked = True
         session.commit()
 
     def removeActiveSong(self, parent):

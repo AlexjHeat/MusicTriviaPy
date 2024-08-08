@@ -10,7 +10,8 @@ class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
-        self.displayWindow = DisplayWindow()
+        self.displayWindow = DisplayWindow(self)
+
         self.playlistManager = PlaylistManager()
         self.ui.categoriesListView.setModel(self.playlistManager.categoriesModel)
         self.ui.songsInListView.setModel(self.playlistManager.songsInModel)
@@ -33,9 +34,11 @@ class ControlWindow(QMainWindow):
         self.ui.removeSongButton.released.connect(self.removeSong)
         self.ui.moveSongInButton.released.connect(self.addSongToCategory)
         self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
+        self.ui.playButton.released.connect(self.play)
 
         self.ui.show()
 
+#   ~~~CATEGORIES~~~
     def loadCategory(self, index:QModelIndex):
         if self.loadedIndex:
             self.updateLoadedSong()
@@ -58,23 +61,25 @@ class ControlWindow(QMainWindow):
             index = self.ui.categoriesListView.currentIndex()
             self.loadCategory(index)
 
-    #Loads the currently selected song in the songIn list view
+#   ~~~SONG LISTVIEWS~~~
+    #Sets the currently selected song in the songIn list view as active, then loads its data
     def loadSongIn(self):
         if self.loadedIndex:
             self.updateLoadedSong()
         self.ui.songsOutListView.clearSelection()
         self.activeSongView = self.ui.songsInListView
         self.loadedIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.loadedIndex, True)
+        song = self.playlistManager.setActiveSong(self.loadedIndex, isSongIn=True)
         self.loadSongData(song)
 
+    #Sets the currently selected song in the songOut list view as active, then loads its data
     def loadSongOut(self):
         if self.loadedIndex:
             self.updateLoadedSong()
         self.ui.songsInListView.clearSelection()
         self.activeSongView = self.ui.songsOutListView
         self.loadedIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.loadedIndex, False)
+        song = self.playlistManager.setActiveSong(self.loadedIndex, isSongIn=False)
         self.loadSongData(song)
 
     def loadSongData(self, song):
@@ -88,7 +93,6 @@ class ControlWindow(QMainWindow):
             else:
                 self.ui.songStartTimeEdit.clear()
 
-    #Update the song whenever the currently loaded song becomes unselected for any reason
     def updateLoadedSong(self):
         song = Song()
         #Get song data from UI
@@ -108,6 +112,7 @@ class ControlWindow(QMainWindow):
         self.ui.songStartTimeEdit.clear()
         self.loadedIndex = None
 
+#   ~~~SONGS~~~
     def addSongs(self):
         self.playlistManager.addSongs(self)
         index = self.ui.categoriesListView.currentIndex()
@@ -132,3 +137,8 @@ class ControlWindow(QMainWindow):
             self.playlistManager.removeActiveSongFromActiveCategory()
             song = self.playlistManager.setActiveSong(self.activeSongView.currentIndex(), True)
             self.loadSongData(song)
+
+#   ~~~MEDIA PLAYER~~~
+    def play(self):
+        song = self.playlistManager.activeSong
+        self.displayWindow.play(song)

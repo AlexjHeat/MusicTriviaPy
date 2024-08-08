@@ -32,7 +32,7 @@ class Category(Base):
 class Song(Base):
     __tablename__ = "Songs"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    file = Column(String, unique=True, nullable=False)
+    fileName = Column(String, unique=True, nullable=False)
     anime = Column(String)
     opNum = Column(Integer, default=0)
     artist = Column(String)
@@ -47,9 +47,12 @@ class Song(Base):
             if self.title:
                 str = str + " - " + self.title
         else:
-            str = self.file
+            str = self.fileName
         return str
 
+class FilePath(Base):
+    __tablename__ = "FilePaths"
+    path = Column(String, primary_key=True)
 
 def createTables():
     Base.metadata.drop_all(engine)
