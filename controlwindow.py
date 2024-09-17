@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMainWindow, QAbstractItemView
 from db import Song
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
+from filemanager import FileManager
 
 class ControlWindow(QMainWindow):
     def __init__(self):
@@ -13,6 +14,7 @@ class ControlWindow(QMainWindow):
         self.displayWindow = DisplayWindow(self)
 
         self.playlistManager = PlaylistManager()
+        self.fileManager = FileManager(self)
         self.ui.categoriesListView.setModel(self.playlistManager.categoriesModel)
         self.ui.songsInListView.setModel(self.playlistManager.songsInModel)
         self.ui.songsOutListView.setModel(self.playlistManager.songsOutModel)
@@ -35,8 +37,11 @@ class ControlWindow(QMainWindow):
         self.ui.moveSongInButton.released.connect(self.addSongToCategory)
         self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
         self.ui.playButton.released.connect(self.play)
+        self.ui.stopButton.released.connect(self.stop)
+        self.ui.volumeSlider.sliderMoved.connect(self.setVolume)
 
         self.ui.show()
+
 
 #   ~~~CATEGORIES~~~
     def loadCategory(self, index:QModelIndex):
@@ -141,4 +146,12 @@ class ControlWindow(QMainWindow):
 #   ~~~MEDIA PLAYER~~~
     def play(self):
         song = self.playlistManager.activeSong
-        self.displayWindow.play(song)
+        filepath = self.fileManager.getFilePath(song.fileName)
+        if filepath:
+            self.displayWindow.play(filepath)
+
+    def stop(self):
+        pass
+
+    def setVolume(self, position):
+        pass

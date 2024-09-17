@@ -50,9 +50,9 @@ class Song(Base):
             str = self.fileName
         return str
 
-class FilePath(Base):
-    __tablename__ = "FilePaths"
-    path = Column(String, primary_key=True)
+class Directory(Base):
+    __tablename__ = "Directories"
+    dir = Column(String, primary_key=True)
 
 def createTables():
     Base.metadata.drop_all(engine)

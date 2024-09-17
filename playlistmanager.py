@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category, FilePath
+from db import Session, Song, Category, Directory
 from listmodels import CategoryListModel, SongListModel
 from categorydialog import CategoryDialog
 from config import defaultCategory as default
@@ -166,10 +166,10 @@ class PlaylistManager:
 
             #Add file path to database, if it does not already exist
             if pathChecked == False:
-                path = file.absolutePath()
-                if session.query(FilePath).filter(FilePath.path == path).scalar() == None:
-                    filePath = FilePath(path=path)
-                    session.add(filePath)
+                dir = file.absolutePath() + "\\"
+                if session.query(Directory).filter(Directory.dir == dir).scalar() == None:
+                    directory = Directory(dir=dir)
+                    session.add(directory)
                 pathChecked = True
         session.commit()
 

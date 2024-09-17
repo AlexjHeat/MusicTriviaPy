@@ -350,14 +350,40 @@
    <widget class="QPushButton" name="playButton">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>290</y>
+      <x>760</x>
+      <y>340</y>
       <width>75</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
      <string>Play</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="volumeSlider">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>370</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopButton">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>340</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
     </property>
    </widget>
   </widget>
@@ -372,24 +398,13 @@
    </property>
    <widget class="QMenu" name="menuCategory">
     <property name="title">
-     <string>Category</string>
+     <string>Options</string>
     </property>
-    <addaction name="actionCreate"/>
-    <addaction name="actionRemove"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuCategory"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionCreate">
-   <property name="text">
-    <string>Create</string>
-   </property>
-  </action>
-  <action name="actionRemove">
-   <property name="text">
-    <string>Remove</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

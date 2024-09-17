@@ -18,19 +18,15 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QLineEdit,
     QListView, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStatusBar, QTextEdit, QToolButton, QVBoxLayout,
-    QWidget)
+    QPushButton, QSizePolicy, QSlider, QSpacerItem,
+    QSpinBox, QStatusBar, QTextEdit, QToolButton,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1004, 600)
-        self.actionCreate = QAction(MainWindow)
-        self.actionCreate.setObjectName(u"actionCreate")
-        self.actionRemove = QAction(MainWindow)
-        self.actionRemove.setObjectName(u"actionRemove")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -247,7 +243,14 @@ class Ui_MainWindow(object):
 
         self.playButton = QPushButton(self.centralwidget)
         self.playButton.setObjectName(u"playButton")
-        self.playButton.setGeometry(QRect(700, 290, 75, 24))
+        self.playButton.setGeometry(QRect(760, 340, 75, 24))
+        self.volumeSlider = QSlider(self.centralwidget)
+        self.volumeSlider.setObjectName(u"volumeSlider")
+        self.volumeSlider.setGeometry(QRect(720, 370, 160, 22))
+        self.volumeSlider.setOrientation(Qt.Horizontal)
+        self.stopButton = QPushButton(self.centralwidget)
+        self.stopButton.setObjectName(u"stopButton")
+        self.stopButton.setGeometry(QRect(860, 340, 75, 24))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -260,8 +263,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuCategory.menuAction())
-        self.menuCategory.addAction(self.actionCreate)
-        self.menuCategory.addAction(self.actionRemove)
+        self.menuCategory.addSeparator()
 
         self.retranslateUi(MainWindow)
 
@@ -270,8 +272,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.actionCreate.setText(QCoreApplication.translate("MainWindow", u"Create", None))
-        self.actionRemove.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
@@ -287,6 +287,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.songStartTimeEdit.setText("")
         self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
-        self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Category", None))
+        self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+        self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
     # retranslateUi
 
