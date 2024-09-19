@@ -149,7 +149,7 @@ class ControlWindow(QMainWindow):
         song = self.playlistManager.activeSong
         filepath = self.fileManager.getFilePath(song.fileName)
         if filepath:
-            self.displayWindow.play(filepath)
+            self.displayWindow.play(filepath, str(song))
 
     def stop(self):
         self.displayWindow.stop()

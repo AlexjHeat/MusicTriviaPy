@@ -4,6 +4,7 @@
         "config.py",
         "controlwindow.py",
         "controlwindow.ui",
+        "countdown.py",
         "db.py",
         "displaywindow.py",
         "displaywindow.ui",

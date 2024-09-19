@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLCDNumber, QMainWindow, QMenuBar,
-    QSizePolicy, QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QLCDNumber, QLabel, QMainWindow,
+    QMenuBar, QSizePolicy, QStatusBar, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -36,7 +37,13 @@ class Ui_MainWindow(object):
         self.countdownLCD.setGeometry(QRect(110, 40, 931, 501))
         self.countdownLCD.setDigitCount(2)
         self.countdownLCD.setProperty("intValue", 30)
+        self.songStringLabel = QLabel(self.centralwidget)
+        self.songStringLabel.setObjectName(u"songStringLabel")
+        self.songStringLabel.setGeometry(QRect(380, 10, 371, 16))
         MainWindow.setCentralWidget(self.centralwidget)
+        self.countdownLCD.raise_()
+        self.verticalLayoutWidget.raise_()
+        self.songStringLabel.raise_()
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1141, 22))
@@ -52,5 +59,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.songStringLabel.setText("")
     # retranslateUi
 

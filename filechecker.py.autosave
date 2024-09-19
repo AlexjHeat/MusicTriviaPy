@@ -1,0 +1,41 @@
+# This Python file uses the following encoding: utf-8
+
+# if __name__ == "__main__":
+#     pass
+
+# This Python file uses the following encoding: utf-8
+from PySide6.QtCore import QFileInfo
+from PySide6.QtWidgets import QMessageBox, QFileDialog
+from db import Session, FilePath
+
+def getFilePath(self, fileName):
+    pass
+
+def checkFileName(self, fileName:str):
+    if QFileInfo(self.activeFilePath.path + fileName).isFile():
+        return True
+
+    session = Session()
+    filePaths = session.query(FilePath).filter(FilePath).all()
+    for filePath in filePaths:
+        if QFileInfo(filePath.path + fileName).isFile():
+            self.activeDir = filePath
+            return True
+
+
+
+    warning_msg = QMessageBox.warning(
+                    self.parent,
+                    'File not found',
+                    f'Please select the folder that {fileName} is in!',
+                    QMessageBox.Ok | QMessageBox.Cancel)
+    if warning_msg == QMessageBox.Ok:
+
+        path = QFileDialog().getExistingDirectory(self.parent, f'Please select the folder that {fileName} is in!')
+        if QFileInfo(filePath + fileName).isFile():
+            filePath = FilePath(path=path)
+            session.add(filePath)
+            session.commit()
+            self.activeDir = filePath
+            return True
+    return False
