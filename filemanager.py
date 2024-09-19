@@ -53,6 +53,7 @@ class FileManager:
                 directory = Directory(dir=dir)
                 session.add(directory)
                 session.commit()
-                self.activeDir =
+
+                self.activeDir = directory.dir
                 return True
         return False
