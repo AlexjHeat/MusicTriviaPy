@@ -241,16 +241,34 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_8)
 
-        self.playButton = QPushButton(self.centralwidget)
-        self.playButton.setObjectName(u"playButton")
-        self.playButton.setGeometry(QRect(760, 340, 75, 24))
         self.volumeSlider = QSlider(self.centralwidget)
         self.volumeSlider.setObjectName(u"volumeSlider")
         self.volumeSlider.setGeometry(QRect(720, 370, 160, 22))
         self.volumeSlider.setOrientation(Qt.Horizontal)
-        self.stopButton = QPushButton(self.centralwidget)
+        self.widget = QWidget(self.centralwidget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(710, 330, 197, 26))
+        self.horizontalLayout_9 = QHBoxLayout(self.widget)
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.playButton = QPushButton(self.widget)
+        self.playButton.setObjectName(u"playButton")
+
+        self.horizontalLayout_9.addWidget(self.playButton)
+
+        self.stopButton = QPushButton(self.widget)
         self.stopButton.setObjectName(u"stopButton")
-        self.stopButton.setGeometry(QRect(860, 340, 75, 24))
+
+        self.horizontalLayout_9.addWidget(self.stopButton)
+
+        self.guessTime = QSpinBox(self.widget)
+        self.guessTime.setObjectName(u"guessTime")
+        self.guessTime.setMinimum(5)
+        self.guessTime.setMaximum(60)
+        self.guessTime.setValue(30)
+
+        self.horizontalLayout_9.addWidget(self.guessTime)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

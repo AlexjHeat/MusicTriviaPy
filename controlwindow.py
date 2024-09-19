@@ -11,7 +11,7 @@ class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
-        self.displayWindow = DisplayWindow(self)
+        self.displayWindow = DisplayWindow(self, self.ui.guessTime.value())
 
         self.playlistManager = PlaylistManager()
         self.fileManager = FileManager(self)
@@ -38,7 +38,8 @@ class ControlWindow(QMainWindow):
         self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
         self.ui.playButton.released.connect(self.play)
         self.ui.stopButton.released.connect(self.stop)
-        self.ui.volumeSlider.sliderMoved.connect(self.setVolume)
+        self.ui.volumeSlider.sliderMoved.connect(self.updateVolume)
+        self.ui.guessTime.valueChanged.connect(self.updateGuessTime)
 
         self.ui.show()
 
@@ -151,7 +152,10 @@ class ControlWindow(QMainWindow):
             self.displayWindow.play(filepath)
 
     def stop(self):
-        pass
+        self.displayWindow.stop()
 
-    def setVolume(self, position):
+    def updateGuessTime(self, i):
+        self.displayWindow.setCountdownTime(i)
+
+    def updateVolume(self, position):
         pass
