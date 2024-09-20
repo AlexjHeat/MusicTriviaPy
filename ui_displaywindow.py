@@ -40,10 +40,14 @@ class Ui_MainWindow(object):
         self.songStringLabel = QLabel(self.centralwidget)
         self.songStringLabel.setObjectName(u"songStringLabel")
         self.songStringLabel.setGeometry(QRect(380, 10, 371, 16))
+        self.TESTLABEL = QLabel(self.centralwidget)
+        self.TESTLABEL.setObjectName(u"TESTLABEL")
+        self.TESTLABEL.setGeometry(QRect(30, 360, 49, 16))
         MainWindow.setCentralWidget(self.centralwidget)
         self.countdownLCD.raise_()
         self.verticalLayoutWidget.raise_()
         self.songStringLabel.raise_()
+        self.TESTLABEL.raise_()
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1141, 22))
@@ -60,5 +64,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.songStringLabel.setText("")
+        self.TESTLABEL.setText("")
     # retranslateUi
 

@@ -12,6 +12,7 @@
         "listmodels.py",
         "main.py",
         "musictrivia.db",
-        "playlistmanager.py"
+        "playlistmanager.py",
+        "volumemanager.py"
     ]
 }

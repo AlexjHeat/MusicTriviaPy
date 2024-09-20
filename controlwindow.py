@@ -158,4 +158,4 @@ class ControlWindow(QMainWindow):
         self.displayWindow.setCountdownTime(i)
 
     def updateVolume(self, position):
-        pass
+        self.displayWindow.setVolume(position)

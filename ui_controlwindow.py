@@ -244,6 +244,7 @@ class Ui_MainWindow(object):
         self.volumeSlider = QSlider(self.centralwidget)
         self.volumeSlider.setObjectName(u"volumeSlider")
         self.volumeSlider.setGeometry(QRect(720, 370, 160, 22))
+        self.volumeSlider.setSliderPosition(99)
         self.volumeSlider.setOrientation(Qt.Horizontal)
         self.widget = QWidget(self.centralwidget)
         self.widget.setObjectName(u"widget")
@@ -264,7 +265,6 @@ class Ui_MainWindow(object):
         self.guessTime = QSpinBox(self.widget)
         self.guessTime.setObjectName(u"guessTime")
         self.guessTime.setMinimum(5)
-        self.guessTime.setMaximum(60)
         self.guessTime.setValue(30)
 
         self.horizontalLayout_9.addWidget(self.guessTime)
