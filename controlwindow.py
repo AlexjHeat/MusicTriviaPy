@@ -90,6 +90,7 @@ class ControlWindow(QMainWindow):
 
     def loadSongData(self, song):
         if song:
+            self.ui.fileNameLabel.setText(song.fileName)
             self.ui.songAnimeEdit.setText(song.anime)
             self.ui.songOpSpinBox.setValue(song.opNum)
             self.ui.songTitleEdit.setText(song.title)

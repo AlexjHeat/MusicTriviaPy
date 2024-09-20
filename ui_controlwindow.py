@@ -158,10 +158,15 @@ class Ui_MainWindow(object):
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(670, 80, 196, 146))
+        self.layoutWidget2.setGeometry(QRect(700, 70, 241, 181))
         self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.fileNameLabel = QLabel(self.layoutWidget2)
+        self.fileNameLabel.setObjectName(u"fileNameLabel")
+
+        self.verticalLayout_3.addWidget(self.fileNameLabel)
+
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.label = QLabel(self.layoutWidget2)
@@ -171,6 +176,11 @@ class Ui_MainWindow(object):
 
         self.songAnimeEdit = QLineEdit(self.layoutWidget2)
         self.songAnimeEdit.setObjectName(u"songAnimeEdit")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.songAnimeEdit.sizePolicy().hasHeightForWidth())
+        self.songAnimeEdit.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_4.addWidget(self.songAnimeEdit)
 
@@ -186,10 +196,12 @@ class Ui_MainWindow(object):
 
         self.songOpSpinBox = QSpinBox(self.layoutWidget2)
         self.songOpSpinBox.setObjectName(u"songOpSpinBox")
+        sizePolicy.setHeightForWidth(self.songOpSpinBox.sizePolicy().hasHeightForWidth())
+        self.songOpSpinBox.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_7.addWidget(self.songOpSpinBox)
 
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(95, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_7.addItem(self.horizontalSpacer_8)
 
@@ -205,6 +217,8 @@ class Ui_MainWindow(object):
 
         self.songTitleEdit = QLineEdit(self.layoutWidget2)
         self.songTitleEdit.setObjectName(u"songTitleEdit")
+        sizePolicy.setHeightForWidth(self.songTitleEdit.sizePolicy().hasHeightForWidth())
+        self.songTitleEdit.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_5.addWidget(self.songTitleEdit)
 
@@ -220,6 +234,8 @@ class Ui_MainWindow(object):
 
         self.songArtistEdit = QLineEdit(self.layoutWidget2)
         self.songArtistEdit.setObjectName(u"songArtistEdit")
+        sizePolicy.setHeightForWidth(self.songArtistEdit.sizePolicy().hasHeightForWidth())
+        self.songArtistEdit.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_6.addWidget(self.songArtistEdit)
 
@@ -235,23 +251,22 @@ class Ui_MainWindow(object):
 
         self.songStartTimeEdit = QLineEdit(self.layoutWidget2)
         self.songStartTimeEdit.setObjectName(u"songStartTimeEdit")
+        sizePolicy.setHeightForWidth(self.songStartTimeEdit.sizePolicy().hasHeightForWidth())
+        self.songStartTimeEdit.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_8.addWidget(self.songStartTimeEdit)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_8)
 
-        self.volumeSlider = QSlider(self.centralwidget)
-        self.volumeSlider.setObjectName(u"volumeSlider")
-        self.volumeSlider.setGeometry(QRect(720, 370, 160, 22))
-        self.volumeSlider.setSliderPosition(99)
-        self.volumeSlider.setOrientation(Qt.Horizontal)
         self.widget = QWidget(self.centralwidget)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(710, 330, 197, 26))
-        self.horizontalLayout_9 = QHBoxLayout(self.widget)
+        self.widget.setGeometry(QRect(720, 310, 199, 56))
+        self.verticalLayout_4 = QVBoxLayout(self.widget)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
         self.playButton = QPushButton(self.widget)
         self.playButton.setObjectName(u"playButton")
 
@@ -268,6 +283,16 @@ class Ui_MainWindow(object):
         self.guessTime.setValue(30)
 
         self.horizontalLayout_9.addWidget(self.guessTime)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_9)
+
+        self.volumeSlider = QSlider(self.widget)
+        self.volumeSlider.setObjectName(u"volumeSlider")
+        self.volumeSlider.setSliderPosition(99)
+        self.volumeSlider.setOrientation(Qt.Horizontal)
+
+        self.verticalLayout_4.addWidget(self.volumeSlider)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -298,6 +323,7 @@ class Ui_MainWindow(object):
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.addSongsButton.setText(QCoreApplication.translate("MainWindow", u"Add Songs", None))
         self.removeSongButton.setText(QCoreApplication.translate("MainWindow", u"Remove Song", None))
+        self.fileNameLabel.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"OP", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Title", None))
@@ -306,6 +332,9 @@ class Ui_MainWindow(object):
         self.songStartTimeEdit.setText("")
         self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+#if QT_CONFIG(tooltip)
+        self.guessTime.setToolTip(QCoreApplication.translate("MainWindow", u"Guess Time", None))
+#endif // QT_CONFIG(tooltip)
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
     # retranslateUi
 

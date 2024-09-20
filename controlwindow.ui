@@ -251,13 +251,20 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>80</y>
-      <width>196</width>
-      <height>146</height>
+      <x>700</x>
+      <y>70</y>
+      <width>241</width>
+      <height>181</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="fileNameLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
@@ -268,7 +275,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="songAnimeEdit"/>
+        <widget class="QLineEdit" name="songAnimeEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -282,16 +296,26 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="songOpSpinBox"/>
+        <widget class="QSpinBox" name="songOpSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_8">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
+           <width>95</width>
            <height>20</height>
           </size>
          </property>
@@ -309,7 +333,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="songTitleEdit"/>
+        <widget class="QLineEdit" name="songTitleEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -323,7 +354,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="songArtistEdit"/>
+        <widget class="QLineEdit" name="songArtistEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -338,6 +376,12 @@
        </item>
        <item>
         <widget class="QLineEdit" name="songStartTimeEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -347,53 +391,54 @@
      </item>
     </layout>
    </widget>
-   <widget class="QSlider" name="volumeSlider">
-    <property name="geometry">
-     <rect>
-      <x>720</x>
-      <y>370</y>
-      <width>160</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="sliderPosition">
-     <number>99</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>330</y>
-      <width>197</width>
-      <height>26</height>
+      <x>720</x>
+      <y>310</y>
+      <width>199</width>
+      <height>56</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <widget class="QPushButton" name="playButton">
-       <property name="text">
-        <string>Play</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QPushButton" name="playButton">
+         <property name="text">
+          <string>Play</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="stopButton">
+         <property name="text">
+          <string>Stop</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="guessTime">
+         <property name="toolTip">
+          <string>Guess Time</string>
+         </property>
+         <property name="minimum">
+          <number>5</number>
+         </property>
+         <property name="value">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="stopButton">
-       <property name="text">
-        <string>Stop</string>
+      <widget class="QSlider" name="volumeSlider">
+       <property name="sliderPosition">
+        <number>99</number>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="guessTime">
-       <property name="minimum">
-        <number>5</number>
-       </property>
-       <property name="value">
-        <number>30</number>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
