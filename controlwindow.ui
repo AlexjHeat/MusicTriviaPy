@@ -252,9 +252,9 @@
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>70</y>
+      <y>60</y>
       <width>241</width>
-      <height>181</height>
+      <height>471</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -389,20 +389,41 @@
        </item>
       </layout>
      </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>720</x>
-      <y>310</y>
-      <width>199</width>
-      <height>56</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="roundLabel">
+       <property name="text">
+        <string>No Active Game</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QSpinBox" name="guessTime">
+         <property name="toolTip">
+          <string>Guess Time</string>
+         </property>
+         <property name="minimum">
+          <number>5</number>
+         </property>
+         <property name="value">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="playButton">
          <property name="text">
@@ -418,15 +439,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="guessTime">
-         <property name="toolTip">
-          <string>Guess Time</string>
+        <widget class="QToolButton" name="nextRoundButton">
+         <property name="text">
+          <string/>
          </property>
-         <property name="minimum">
-          <number>5</number>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
          </property>
-         <property name="value">
-          <number>30</number>
+         <property name="arrowType">
+          <enum>Qt::RightArrow</enum>
          </property>
         </widget>
        </item>
@@ -459,10 +480,22 @@
      <string>Options</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="menuNewGame"/>
+    <addaction name="menuEndGame"/>
    </widget>
    <addaction name="menuCategory"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="menuNewGame">
+   <property name="text">
+    <string>New Game</string>
+   </property>
+  </action>
+  <action name="menuEndGame">
+   <property name="text">
+    <string>End Game</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

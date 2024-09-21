@@ -25,6 +25,7 @@ class ControlWindow(QMainWindow):
         self.ui.categoriesListView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         #set validator for ui.startTimeEdit to only accept int
 
+        self.round = 0
         #connections
         self.ui.categoriesListView.clicked.connect(self.loadCategory)
         self.ui.categoryCreateButton.released.connect(self.createCategory)
@@ -40,6 +41,9 @@ class ControlWindow(QMainWindow):
         self.ui.stopButton.released.connect(self.stop)
         self.ui.volumeSlider.sliderMoved.connect(self.updateVolume)
         self.ui.guessTime.valueChanged.connect(self.updateGuessTime)
+        self.ui.menuNewGame.triggered.connect(self.newGame)
+        self.ui.menuEndGame.triggered.connect(self.endGame)
+        self.ui.nextRoundButton.released.connect(self.nextRound)
 
         self.ui.show()
 
@@ -150,7 +154,7 @@ class ControlWindow(QMainWindow):
         song = self.playlistManager.activeSong
         filepath = self.fileManager.getFilePath(song.fileName)
         if filepath:
-            self.displayWindow.play(filepath, str(song))
+            self.displayWindow.play(filepath, song)
 
     def stop(self):
         self.displayWindow.stop()
@@ -160,3 +164,23 @@ class ControlWindow(QMainWindow):
 
     def updateVolume(self, position):
         self.displayWindow.setVolume(position)
+
+#   ~~~GAME~~~
+    def newGame(self):
+        self.round = 1
+        self.ui.roundLabel.setText(f'Round {self.round}')
+        self.displayWindow.setRound(self.round)
+        self.stop()
+
+    def endGame(self):
+        self.round = 0
+        self.ui.roundLabel.setText('No Active Game')
+        self.displayWindow.setRound(self.round)
+        self.stop()
+
+    def nextRound(self):
+        self.round += 1
+        self.ui.roundLabel.setText(f'Round {self.round}')
+        self.displayWindow.setRound(self.round)
+        self.stop()
+

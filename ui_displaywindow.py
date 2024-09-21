@@ -37,17 +37,29 @@ class Ui_MainWindow(object):
         self.countdownLCD.setGeometry(QRect(110, 40, 931, 501))
         self.countdownLCD.setDigitCount(2)
         self.countdownLCD.setProperty("intValue", 30)
-        self.songStringLabel = QLabel(self.centralwidget)
-        self.songStringLabel.setObjectName(u"songStringLabel")
-        self.songStringLabel.setGeometry(QRect(380, 10, 371, 16))
-        self.TESTLABEL = QLabel(self.centralwidget)
-        self.TESTLABEL.setObjectName(u"TESTLABEL")
-        self.TESTLABEL.setGeometry(QRect(30, 360, 49, 16))
+        self.widget = QWidget(self.centralwidget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(370, 0, 411, 40))
+        self.verticalLayout = QVBoxLayout(self.widget)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.roundLabel = QLabel(self.widget)
+        self.roundLabel.setObjectName(u"roundLabel")
+        self.roundLabel.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout.addWidget(self.roundLabel)
+
+        self.songLabel = QLabel(self.widget)
+        self.songLabel.setObjectName(u"songLabel")
+        self.songLabel.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout.addWidget(self.songLabel)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.countdownLCD.raise_()
         self.verticalLayoutWidget.raise_()
-        self.songStringLabel.raise_()
-        self.TESTLABEL.raise_()
+        self.songLabel.raise_()
+        self.roundLabel.raise_()
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1141, 22))
@@ -63,7 +75,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.songStringLabel.setText("")
-        self.TESTLABEL.setText("")
+        self.roundLabel.setText("")
+        self.songLabel.setText("")
     # retranslateUi
 

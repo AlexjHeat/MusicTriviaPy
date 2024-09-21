@@ -14,6 +14,9 @@ class DisplayWindow:
         self.ui = QtUiTools.QUiLoader().load("displaywindow.ui")
         self.ui.show()
 
+        self.activeSong = None
+        self.round = 0
+
         self.mediaPlayer = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.mediaPlayer.setAudioOutput(self.audioOutput)
@@ -27,10 +30,10 @@ class DisplayWindow:
 
         self.volumeManager = VolumeManager(self.audioOutput)
 
-    def play(self, filepath, songString):
-        self.showCountdown()
-        self.ui.songStringLabel.setText(songString)
 
+    def play(self, filepath, song):
+        self.showCountdown()
+        self.activeSong = song
         if self.mediaPlayer.isPlaying():
             self.mediaPlayer.stop()
             time.sleep(0.1)
@@ -54,13 +57,20 @@ class DisplayWindow:
 
     def showVideo(self):
         self.videoWidget.show()
-        self.ui.songStringLabel.show()
         self.ui.countdownLCD.hide()
+        #add try catch block in case activeSong is still a None type (AttributeError)
+        self.ui.songLabel.setText(self.activeSong.anime)
+        if self.round > 0 : self.ui.roundLabel.setText(f'Round {self.round}')
 
     def showCountdown(self):
         self.ui.countdownLCD.show()
         self.videoWidget.hide()
-        self.ui.songStringLabel.hide()
+        self.ui.songLabel.setText("")
+        if self.round > 0 : self.ui.roundLabel.setText(f'Round {self.round}')
 
     def setVolume(self, i):
         self.volumeManager.setVolume(i)
+
+    def setRound(self, i):
+        self.round = i
+        if self.round > 0 : self.ui.roundLabel.setText(f'Round {self.round}')

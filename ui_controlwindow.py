@@ -27,6 +27,10 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1004, 600)
+        self.menuNewGame = QAction(MainWindow)
+        self.menuNewGame.setObjectName(u"menuNewGame")
+        self.menuEndGame = QAction(MainWindow)
+        self.menuEndGame.setObjectName(u"menuEndGame")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -158,7 +162,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 70, 241, 181))
+        self.layoutWidget2.setGeometry(QRect(700, 60, 241, 471))
         self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -259,40 +263,50 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_8)
 
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(720, 310, 199, 56))
-        self.verticalLayout_4 = QVBoxLayout(self.widget)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer_2)
+
+        self.roundLabel = QLabel(self.layoutWidget2)
+        self.roundLabel.setObjectName(u"roundLabel")
+
+        self.verticalLayout_3.addWidget(self.roundLabel)
+
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.playButton = QPushButton(self.widget)
-        self.playButton.setObjectName(u"playButton")
-
-        self.horizontalLayout_9.addWidget(self.playButton)
-
-        self.stopButton = QPushButton(self.widget)
-        self.stopButton.setObjectName(u"stopButton")
-
-        self.horizontalLayout_9.addWidget(self.stopButton)
-
-        self.guessTime = QSpinBox(self.widget)
+        self.guessTime = QSpinBox(self.layoutWidget2)
         self.guessTime.setObjectName(u"guessTime")
         self.guessTime.setMinimum(5)
         self.guessTime.setValue(30)
 
         self.horizontalLayout_9.addWidget(self.guessTime)
 
+        self.playButton = QPushButton(self.layoutWidget2)
+        self.playButton.setObjectName(u"playButton")
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_9)
+        self.horizontalLayout_9.addWidget(self.playButton)
 
-        self.volumeSlider = QSlider(self.widget)
+        self.stopButton = QPushButton(self.layoutWidget2)
+        self.stopButton.setObjectName(u"stopButton")
+
+        self.horizontalLayout_9.addWidget(self.stopButton)
+
+        self.nextRoundButton = QToolButton(self.layoutWidget2)
+        self.nextRoundButton.setObjectName(u"nextRoundButton")
+        self.nextRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.nextRoundButton.setArrowType(Qt.RightArrow)
+
+        self.horizontalLayout_9.addWidget(self.nextRoundButton)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_9)
+
+        self.volumeSlider = QSlider(self.layoutWidget2)
         self.volumeSlider.setObjectName(u"volumeSlider")
         self.volumeSlider.setSliderPosition(99)
         self.volumeSlider.setOrientation(Qt.Horizontal)
 
-        self.verticalLayout_4.addWidget(self.volumeSlider)
+        self.verticalLayout_3.addWidget(self.volumeSlider)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -307,6 +321,8 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuCategory.menuAction())
         self.menuCategory.addSeparator()
+        self.menuCategory.addAction(self.menuNewGame)
+        self.menuCategory.addAction(self.menuEndGame)
 
         self.retranslateUi(MainWindow)
 
@@ -315,6 +331,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.menuNewGame.setText(QCoreApplication.translate("MainWindow", u"New Game", None))
+        self.menuEndGame.setText(QCoreApplication.translate("MainWindow", u"End Game", None))
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
@@ -330,11 +348,13 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Artist", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.songStartTimeEdit.setText("")
-        self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
-        self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+        self.roundLabel.setText(QCoreApplication.translate("MainWindow", u"No Active Game", None))
 #if QT_CONFIG(tooltip)
         self.guessTime.setToolTip(QCoreApplication.translate("MainWindow", u"Guess Time", None))
 #endif // QT_CONFIG(tooltip)
+        self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
+        self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+        self.nextRoundButton.setText("")
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
     # retranslateUi
 
