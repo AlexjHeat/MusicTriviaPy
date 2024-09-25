@@ -18,6 +18,9 @@ class Countdown(QObject):
         if reset:
             self.resetDisplay()
 
+    def getTime(self):
+        return self.totalTime
+
     def start(self):
        self.resetDisplay()
        self.timer.start(1000)
@@ -36,3 +39,4 @@ class Countdown(QObject):
     def resetDisplay(self):
         self.currentTime = self.totalTime
         self.display.display(self.currentTime)
+

@@ -3,11 +3,13 @@ from PySide6 import QtUiTools
 from PySide6.QtCore import QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PySide6.QtMultimediaWidgets import QVideoWidget
-import time
 from countdown import Countdown
 from volumemanager import VolumeManager
+import time, random
 
-class DisplayWindow:
+MIN_POST_GUESS_TIME = 20
+
+class DisplayWindow: 
     def __init__(self, parent, countdownTime):
         super().__init__()
         self.parent = parent
@@ -30,6 +32,8 @@ class DisplayWindow:
 
         self.volumeManager = VolumeManager(self.audioOutput)
 
+        self.mediaPlayer.mediaStatusChanged.connect(self.updatePosition)
+
 
     def play(self, filepath, song):
         self.showCountdown()
@@ -43,6 +47,17 @@ class DisplayWindow:
         self.volumeManager.softStart()
         self.countdown.start()
 
+    def updatePosition(self, status):
+        if self.activeSong.startTime == 0 or self.activeSong.startTime is None:
+            trackLength = int(self.mediaPlayer.duration() / 1000)
+            countdownTime = self.countdown.getTime()
+            maxStartTime = trackLength - countdownTime - MIN_POST_GUESS_TIME
+            if maxStartTime <= 0:
+                self.mediaPlayer.setPosition(0)
+            else:
+                self.mediaPlayer.setPosition(random.randint(0,maxStartTime) * 1000)
+        elif self.activeSong.startTime > 0:
+            self.mediaPlayer.setPosition(self.activeSong.startTime * 1000)
     def stop(self):
         self.showCountdown()
         self.mediaPlayer.stop()
