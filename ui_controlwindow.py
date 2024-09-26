@@ -31,6 +31,9 @@ class Ui_MainWindow(object):
         self.menuNewGame.setObjectName(u"menuNewGame")
         self.menuEndGame = QAction(MainWindow)
         self.menuEndGame.setObjectName(u"menuEndGame")
+        self.menuFullscreen = QAction(MainWindow)
+        self.menuFullscreen.setObjectName(u"menuFullscreen")
+        self.menuFullscreen.setCheckable(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -327,15 +330,19 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 1004, 22))
         self.menuCategory = QMenu(self.menubar)
         self.menuCategory.setObjectName(u"menuCategory")
+        self.menuView = QMenu(self.menubar)
+        self.menuView.setObjectName(u"menuView")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuCategory.menuAction())
+        self.menubar.addAction(self.menuView.menuAction())
         self.menuCategory.addSeparator()
         self.menuCategory.addAction(self.menuNewGame)
         self.menuCategory.addAction(self.menuEndGame)
+        self.menuView.addAction(self.menuFullscreen)
 
         self.retranslateUi(MainWindow)
 
@@ -346,6 +353,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.menuNewGame.setText(QCoreApplication.translate("MainWindow", u"New Game", None))
         self.menuEndGame.setText(QCoreApplication.translate("MainWindow", u"End Game", None))
+        self.menuFullscreen.setText(QCoreApplication.translate("MainWindow", u"Fullscreen", None))
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
@@ -371,5 +379,6 @@ class Ui_MainWindow(object):
         self.currentPosLabel.setText("")
         self.trackDurLabel.setText("")
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
+        self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
     # retranslateUi
 

@@ -2,6 +2,7 @@
 from PySide6 import QtUiTools
 from PySide6.QtCore import QModelIndex, QTimer
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
+from PySide6.QtGui import QPixmap
 from db import Song
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
@@ -44,9 +45,10 @@ class ControlWindow(QMainWindow):
         self.ui.stopButton.released.connect(self.stop)
         self.ui.volumeSlider.sliderMoved.connect(self.updateVolume)
         self.ui.guessTime.valueChanged.connect(self.updateGuessTime)
+        self.ui.nextRoundButton.released.connect(self.nextRound)
         self.ui.menuNewGame.triggered.connect(self.newGame)
         self.ui.menuEndGame.triggered.connect(self.endGame)
-        self.ui.nextRoundButton.released.connect(self.nextRound)
+        self.ui.menuFullscreen.triggered.connect(self.fullscreen)
 
         self.ui.show()
 
@@ -199,4 +201,8 @@ class ControlWindow(QMainWindow):
         self.ui.roundLabel.setText(f'Round {self.round}')
         self.displayWindow.setRound(self.round)
         self.stop()
+
+#   ~~~DISPLAY~~~
+    def fullscreen(self):
+        self.displayWindow.setFullscreen(self.ui.menuFullscreen.isChecked())
 
