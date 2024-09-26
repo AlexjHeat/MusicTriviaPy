@@ -41,7 +41,7 @@
      <number>30</number>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -73,10 +73,9 @@
      </item>
     </layout>
    </widget>
+   <zorder>layoutWidget</zorder>
    <zorder>countdownLCD</zorder>
    <zorder>verticalLayoutWidget</zorder>
-   <zorder>songLabel</zorder>
-   <zorder>roundLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -19,8 +19,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QLineEdit,
     QListView, QMainWindow, QMenu, QMenuBar,
     QPushButton, QSizePolicy, QSlider, QSpacerItem,
-    QSpinBox, QStatusBar, QTextEdit, QToolButton,
-    QVBoxLayout, QWidget)
+    QSpinBox, QSplitter, QStatusBar, QTextEdit,
+    QToolButton, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -162,7 +162,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 60, 241, 471))
+        self.layoutWidget2.setGeometry(QRect(700, 50, 241, 481))
         self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -308,6 +308,19 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.volumeSlider)
 
+        self.splitter = QSplitter(self.layoutWidget2)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.currentPosLabel = QLabel(self.splitter)
+        self.currentPosLabel.setObjectName(u"currentPosLabel")
+        self.currentPosLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.splitter.addWidget(self.currentPosLabel)
+        self.trackDurLabel = QLabel(self.splitter)
+        self.trackDurLabel.setObjectName(u"trackDurLabel")
+        self.splitter.addWidget(self.trackDurLabel)
+
+        self.verticalLayout_3.addWidget(self.splitter)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -355,6 +368,8 @@ class Ui_MainWindow(object):
         self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
         self.nextRoundButton.setText("")
+        self.currentPosLabel.setText("")
+        self.trackDurLabel.setText("")
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
     # retranslateUi
 

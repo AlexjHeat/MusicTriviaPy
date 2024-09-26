@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtUiTools
-from PySide6.QtCore import QModelIndex
+from PySide6.QtCore import QModelIndex, QTimer
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
 from db import Song
 from displaywindow import DisplayWindow
@@ -26,6 +26,9 @@ class ControlWindow(QMainWindow):
         #set validator for ui.startTimeEdit to only accept int
 
         self.round = 0
+        self.playbackTimer = QTimer()
+        self.playbackTimer.timeout.connect(self.updatePlaybackTime)
+
         #connections
         self.ui.categoriesListView.clicked.connect(self.loadCategory)
         self.ui.categoryCreateButton.released.connect(self.createCategory)
@@ -155,15 +158,28 @@ class ControlWindow(QMainWindow):
         filepath = self.fileManager.getFilePath(song.fileName)
         if filepath:
             self.displayWindow.play(filepath, song)
+            self.playbackTimer.start(1000)
 
     def stop(self):
         self.displayWindow.stop()
+        self.playbackTimer.stop()
+        self.ui.currentPosLabel.setText('0:00')
+        self.ui.trackDurLabel.setText('/ 0:00')
 
     def updateGuessTime(self, i):
         self.displayWindow.setCountdownTime(i)
 
     def updateVolume(self, position):
         self.displayWindow.setVolume(position)
+
+    def updatePlaybackTime(self):
+        currentPos = self.displayWindow.getPosition()
+        trackLength = self.displayWindow.getTrackLength()
+        if currentPos is False:
+            self.playbackTimer.stop()
+            self.stop()
+        self.ui.currentPosLabel.setText(f'{int(currentPos/60)}:{int((currentPos%60)/10)}{(currentPos%60)%10}')
+        self.ui.trackDurLabel.setText(f'/ {int(trackLength/60)}:{int((trackLength%60)/10)}{(trackLength%60)%10}')
 
 #   ~~~GAME~~~
     def newGame(self):
