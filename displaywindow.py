@@ -30,7 +30,6 @@ class DisplayWindow:
         self.mediaPlayer.setAudioOutput(self.audioOutput)
         self.mediaPlayer.setVideoOutput(self.videoOutput)
 
-
         self.countdown = Countdown(self.ui.countdownLCD, countdownTime)
         self.countdown.countdownComplete.connect(self.reveal)
         self.showCountdown()
@@ -38,14 +37,13 @@ class DisplayWindow:
 
         self.mediaPlayer.mediaStatusChanged.connect(self.updatePosition)
 
-        self.loadBanner()
-
-    def loadBanner(self):
-        movie = QMovie("./Images/banners/main/center.gif")
-        self.ui.bannerCenter.setMovie(movie)
-        movie.start()
-        self.ui.bannerLeft.setPixmap(QPixmap("./Images/banners/main/left.png"))
-        self.ui.bannerRight.setPixmap(QPixmap("./Images/banners/main/left.png"))
+    def loadCategory(self, category):
+        if category.name == "Defafult":
+            movie = QMovie("./Images/banners/main/center.gif")
+            self.ui.bannerCenter.setMovie(movie)
+            movie.start()
+            self.ui.bannerLeft.setPixmap(QPixmap("./Images/banners/main/left.png"))
+            self.ui.bannerRight.setPixmap(QPixmap("./Images/banners/main/left.png"))
 
     def play(self, filepath, song):
         self.showCountdown()

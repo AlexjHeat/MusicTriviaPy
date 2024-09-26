@@ -2,7 +2,6 @@
 from PySide6 import QtUiTools
 from PySide6.QtCore import QModelIndex, QTimer
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
-from PySide6.QtGui import QPixmap
 from db import Song
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
@@ -19,9 +18,10 @@ class ControlWindow(QMainWindow):
         self.ui.categoriesListView.setModel(self.playlistManager.categoriesModel)
         self.ui.songsInListView.setModel(self.playlistManager.songsInModel)
         self.ui.songsOutListView.setModel(self.playlistManager.songsOutModel)
+        self.setDisplayCategory(default=True)
 
         self.activeSongView = None
-        self.loadedIndex = None
+        self.activeSongIndex = None
 
         self.ui.categoriesListView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         #set validator for ui.startTimeEdit to only accept int
@@ -31,10 +31,11 @@ class ControlWindow(QMainWindow):
         self.playbackTimer.timeout.connect(self.updatePlaybackTime)
 
         #connections
-        self.ui.categoriesListView.clicked.connect(self.loadCategory)
+        self.ui.categoriesListView.clicked.connect(self.loadCategoryPlaylist)
         self.ui.categoryCreateButton.released.connect(self.createCategory)
         self.ui.categoryEditButton.released.connect(self.editCategory)
         self.ui.categoryRemoveButton.released.connect(self.removeCategory)
+        self.ui.categoryLoadButton.released.connect(self.setDisplayCategory)
         self.ui.songsInListView.clicked.connect(self.loadSongIn)
         self.ui.songsOutListView.clicked.connect(self.loadSongOut)
         self.ui.addSongsButton.released.connect(self.addSongs)
@@ -54,47 +55,60 @@ class ControlWindow(QMainWindow):
 
 
 #   ~~~CATEGORIES~~~
-    def loadCategory(self, index:QModelIndex):
-        if self.loadedIndex:
-            self.updateLoadedSong()
+    def loadCategoryPlaylist(self, index:QModelIndex):
+        #save currently selected song info before loading new category
+        if self.activeSongIndex:
+            self.updateActiveSong()
+        #load new category information throughout Control Window, BUT NOT DISPLAY WINDOW
         cat = self.playlistManager.setActiveCategory(index)
         if cat:
             self.ui.categoryDescriptionEdit.setText(cat.description)
             self.ui.currentCategoryLabel.setText(f'Current Category: {cat.name}')
 
+    def setDisplayCategory(self, default=False):
+        if default:
+            category = self.playlistManager.getDefaultCategory()
+        else:
+            category = self.playlistManager.getActiveCategory()
+        if category:
+            self.displayWindow.loadCategory(category)
+
     def createCategory(self):
+        #Opens category dialog
         self.playlistManager.createCategory(self)
 
     def editCategory(self):
         index = self.ui.categoriesListView.currentIndex()
+        #Opens category dialog
         if self.playlistManager.editActiveCategory(self):
-            self.loadCategory(index)
+            self.loadCategoryPlaylist(index)
 
     def removeCategory(self):
         index = self.ui.categoriesListView.currentIndex()
         if self.playlistManager.removeActiveCategory(self):
+            #Will switch to category directly above removed one
             index = self.ui.categoriesListView.currentIndex()
-            self.loadCategory(index)
+            self.loadCategoryPlaylist(index)
 
 #   ~~~SONG LISTVIEWS~~~
     #Sets the currently selected song in the songIn list view as active, then loads its data
     def loadSongIn(self):
-        if self.loadedIndex:
-            self.updateLoadedSong()
+        if self.activeSongIndex:
+            self.updateActiveSong()
         self.ui.songsOutListView.clearSelection()
         self.activeSongView = self.ui.songsInListView
-        self.loadedIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.loadedIndex, isSongIn=True)
+        self.activeSongIndex = self.activeSongView.currentIndex()
+        song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=True)
         self.loadSongData(song)
 
     #Sets the currently selected song in the songOut list view as active, then loads its data
     def loadSongOut(self):
-        if self.loadedIndex:
-            self.updateLoadedSong()
+        if self.activeSongIndex:
+            self.updateActiveSong()
         self.ui.songsInListView.clearSelection()
         self.activeSongView = self.ui.songsOutListView
-        self.loadedIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.loadedIndex, isSongIn=False)
+        self.activeSongIndex = self.activeSongView.currentIndex()
+        song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=False)
         self.loadSongData(song)
 
     def loadSongData(self, song):
@@ -109,7 +123,7 @@ class ControlWindow(QMainWindow):
             else:
                 self.ui.songStartTimeEdit.clear()
 
-    def updateLoadedSong(self):
+    def updateActiveSong(self):
         song = Song()
         #Get song data from UI
         song.anime = self.ui.songAnimeEdit.text()
@@ -126,7 +140,7 @@ class ControlWindow(QMainWindow):
         self.ui.songTitleEdit.clear()
         self.ui.songArtistEdit.clear()
         self.ui.songStartTimeEdit.clear()
-        self.loadedIndex = None
+        self.activeSongIndex = None
 
 #   ~~~SONGS~~~
     def addSongs(self):
@@ -136,7 +150,7 @@ class ControlWindow(QMainWindow):
 
     def removeSong(self):
         if self.playlistManager.removeActiveSong(self):
-            self.loadedIndex = None
+            self.activeSongIndex = None
             self.activeSongView = None
 
     def addSongToCategory(self):

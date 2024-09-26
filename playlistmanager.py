@@ -54,6 +54,13 @@ class PlaylistManager:
 
         return self.activeCategory
 
+    def getActiveCategory(self):
+        return self.activeCategory
+
+    def getDefaultCategory(self):
+        session = Session()
+        return session.query(Category).filter(Category.name == default).one()
+
     def createCategory(self, parent):
         dialog = CategoryDialog(parent)
         if dialog.exec() == QDialog.Accepted:
