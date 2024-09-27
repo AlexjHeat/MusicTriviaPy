@@ -106,7 +106,7 @@ class PlaylistManager:
     def removeActiveCategory(self, parent):
         #Make sure default category is not being edited
         if self.activeCategory.name == default:
-            QMessageBox.warning(parent, 'Warning', "Cannot edit default category!")
+            QMessageBox.warning(parent, 'Warning', "Cannot remove default category!")
             return False
 
         #Make user confirm to prevent accidental loss of data

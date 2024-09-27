@@ -27,6 +27,10 @@ class Category(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True, nullable=False)
     description = Column(String)
+    folderName = Column(String, unique=True)
+    backgroundColorHex = Column(String)
+    clockColorHex = Column(String)
+    lcdColorHex = Column(String)
     songs = relationship('Song', secondary=category_song_association, back_populates='categories')
 
 class Song(Base):
@@ -61,7 +65,13 @@ def createTables():
 
 def createDefaultCategory():
     session = Session()
-    cat = Category(name=defaultCategory, description='All songs are added to this category by default.')
+    cat = Category( name=defaultCategory,
+                    description='All songs are added to this category by default.',
+                    folderName="./images/default/",
+                    backgroundColorHex="3652AC",
+                    clockColorHex="85A2FD",
+                    lcdColorHex="FFFFFF"
+                    )
     #add all songs to category
     session.add(cat)
     session.commit()

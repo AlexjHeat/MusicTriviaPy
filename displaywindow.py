@@ -20,6 +20,7 @@ class DisplayWindow:
         self.ui.show()
 
         self.activeSong = None
+        self.activeCategory = None
         self.round = 0
 
         self.videoOutput = QVideoWidget()
@@ -38,12 +39,16 @@ class DisplayWindow:
         self.mediaPlayer.mediaStatusChanged.connect(self.updatePosition)
 
     def loadCategory(self, category):
-        if category.name == "Defafult":
-            movie = QMovie("./Images/banners/main/center.gif")
-            self.ui.bannerCenter.setMovie(movie)
-            movie.start()
-            self.ui.bannerLeft.setPixmap(QPixmap("./Images/banners/main/left.png"))
-            self.ui.bannerRight.setPixmap(QPixmap("./Images/banners/main/left.png"))
+        if category is None:
+            return False
+
+        self.activeCategory = category
+        folder = self.activeCategory.folderName
+        movie = QMovie(folder + "/center.gif")
+        self.ui.bannerCenter.setMovie(movie)
+        movie.start()
+        self.ui.bannerLeft.setPixmap(QPixmap(folder + "/left.png"))
+        self.ui.bannerRight.setPixmap(QPixmap(folder + "/right.png"))
 
     def play(self, filepath, song):
         self.showCountdown()
