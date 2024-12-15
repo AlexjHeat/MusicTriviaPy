@@ -7,6 +7,8 @@ from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
 from filemanager import FileManager
 
+MAX_ROUNDS = 10
+
 class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -47,6 +49,7 @@ class ControlWindow(QMainWindow):
         self.ui.volumeSlider.sliderMoved.connect(self.updateVolume)
         self.ui.guessTime.valueChanged.connect(self.updateGuessTime)
         self.ui.nextRoundButton.released.connect(self.nextRound)
+        self.ui.prevRoundButton.released.connect(self.prevRound)
         self.ui.menuNewGame.triggered.connect(self.newGame)
         self.ui.menuEndGame.triggered.connect(self.endGame)
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
@@ -146,7 +149,7 @@ class ControlWindow(QMainWindow):
     def addSongs(self):
         self.playlistManager.addSongs(self)
         index = self.ui.categoriesListView.currentIndex()
-        self.loadCategory(index)
+        self.loadCategoryPlaylist(index)
 
     def removeSong(self):
         if self.playlistManager.removeActiveSong(self):
@@ -158,7 +161,7 @@ class ControlWindow(QMainWindow):
             #Move song from bottom view to top view
             self.playlistManager.addActiveSongToActiveCategory()
 
-            #Need to now update the active song in playlistmanager, and update the song info in the UI
+            #Update the active song in playlistmanager, and update the song info in the UI
             song = self.playlistManager.setActiveSong(self.activeSongView.currentIndex(), False)
             self.loadSongData(song)
 
@@ -189,7 +192,7 @@ class ControlWindow(QMainWindow):
         self.displayWindow.setVolume(position)
 
     def updatePlaybackTime(self):
-        currentPos = self.displayWindow.getPosition()
+        currentPos = self.displayWindow.getCurrentPosition()
         trackLength = self.displayWindow.getTrackLength()
         if currentPos is False:
             self.playbackTimer.stop()
@@ -210,11 +213,22 @@ class ControlWindow(QMainWindow):
         self.displayWindow.setRound(self.round)
         self.stop()
 
-    def nextRound(self):
-        self.round += 1
-        self.ui.roundLabel.setText(f'Round {self.round}')
+    def prevRound(self):
+        if self.round > 0:
+            self.round -= 1
+            if self.round == 0:
+                self.ui.roundLabel.setText('No Active Game')
+            else:
+                self.ui.roundLabel.setText(f'Round {self.round}')
         self.displayWindow.setRound(self.round)
-        self.stop()
+            #self.stop()
+
+    def nextRound(self):
+        if self.round < MAX_ROUNDS:
+            self.round += 1
+            self.ui.roundLabel.setText(f'Round {self.round}')
+            self.displayWindow.setRound(self.round)
+            #self.stop()
 
 #   ~~~DISPLAY~~~
     def fullscreen(self):

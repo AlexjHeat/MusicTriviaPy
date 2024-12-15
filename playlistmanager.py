@@ -38,7 +38,6 @@ class PlaylistManager:
         self.activeCategory = self.categoriesModel.data(index, Qt.ItemDataRole)
 
         #load songs belonging to the active category to model
-
         session = Session()
         songs = session.query(Song).filter(Song.categories.any(Category.name == self.activeCategory.name)).all()
         self.songsInModel.loadData(songs)

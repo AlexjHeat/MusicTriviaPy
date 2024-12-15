@@ -58,11 +58,6 @@ class Directory(Base):
     __tablename__ = "Directories"
     dir = Column(String, primary_key=True)
 
-def createTables():
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-    createDefaultCategory()
-
 def createDefaultCategory():
     session = Session()
     cat = Category( name=defaultCategory,

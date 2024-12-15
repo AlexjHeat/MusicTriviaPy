@@ -3,6 +3,7 @@ from PySide6.QtCore import QTimer, QObject, Signal
 
 class Countdown(QObject):
     countdownComplete = Signal()
+    countdownWarning = Signal()     #Set to n seconds
 
     def __init__(self, countdownLCD, time):
         super().__init__()
@@ -31,12 +32,17 @@ class Countdown(QObject):
 
     def countdownUpdate(self):
         self.currentTime -= 1
+        self.display.setDigitCount(len(str(self.currentTime)))
         self.display.display(self.currentTime)
+        if self.currentTime == 3:
+            self.countdownWarning.emit()
         if self.currentTime <= 0:
             self.stop()
             self.countdownComplete.emit()
 
     def resetDisplay(self):
         self.currentTime = self.totalTime
+        self.display.setDigitCount(len(str(self.currentTime)))
         self.display.display(self.currentTime)
+
 

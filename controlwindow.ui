@@ -277,7 +277,7 @@
      <rect>
       <x>700</x>
       <y>50</y>
-      <width>241</width>
+      <width>257</width>
       <height>481</height>
      </rect>
     </property>
@@ -459,6 +459,19 @@
         <widget class="QPushButton" name="stopButton">
          <property name="text">
           <string>Stop</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="prevRoundButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::LeftArrow</enum>
          </property>
         </widget>
        </item>

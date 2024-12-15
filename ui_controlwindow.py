@@ -179,7 +179,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 50, 241, 481))
+        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 481))
         self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -308,6 +308,13 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9.addWidget(self.stopButton)
 
+        self.prevRoundButton = QToolButton(self.layoutWidget2)
+        self.prevRoundButton.setObjectName(u"prevRoundButton")
+        self.prevRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.prevRoundButton.setArrowType(Qt.LeftArrow)
+
+        self.horizontalLayout_9.addWidget(self.prevRoundButton)
+
         self.nextRoundButton = QToolButton(self.layoutWidget2)
         self.nextRoundButton.setObjectName(u"nextRoundButton")
         self.nextRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -390,6 +397,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+        self.prevRoundButton.setText("")
         self.nextRoundButton.setText("")
         self.currentPosLabel.setText("")
         self.trackDurLabel.setText("")
