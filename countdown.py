@@ -32,9 +32,8 @@ class Countdown(QObject):
 
     def countdownUpdate(self):
         self.currentTime -= 1
-        self.display.setDigitCount(len(str(self.currentTime)))
-        self.display.display(self.currentTime)
-        if self.currentTime == 3:
+        self.setDisplay(self.currentTime)
+        if self.currentTime == 2:
             self.countdownWarning.emit()
         if self.currentTime <= 0:
             self.stop()
@@ -42,7 +41,11 @@ class Countdown(QObject):
 
     def resetDisplay(self):
         self.currentTime = self.totalTime
-        self.display.setDigitCount(len(str(self.currentTime)))
-        self.display.display(self.currentTime)
+        self.setDisplay(self.totalTime)
+
+
+    def setDisplay(self, i):
+        self.display.setDigitCount(len(str(i)))
+        self.display.display(i)
 
 

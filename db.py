@@ -47,9 +47,11 @@ class Song(Base):
     def __str__(self):
         str = ""
         if self.anime:
-            str = str + self.anime
+            str = self.anime
+            if self.opNum:
+                str += f' - OP{self.opNum}'
             if self.title:
-                str = str + " - " + self.title
+                str += f' - {self.title}'
         else:
             str = self.fileName
         return str
