@@ -1,3 +1,18 @@
 # This Python file uses the following encoding: utf-8
 
-defaultCategory = "Default"
+DEFAULT_CATEGORY = "Default"
+
+MIN_POST_GUESS_TIME = 15
+MAX_ROUNDS = 10
+TRANSITION_TIME = 2     #used for transition gif
+
+DEFAULT_ROUND_FONT = 'Yoruka'
+DEFAULT_ROUND_FONT_SIZE = 48
+DEFAULT_ROUND_COLOR = '#ba7c00'
+
+DEFAULT_CLOCK_FONT = 'Digital-7'
+DEFAULT_CLOCK_FONT_SIZE = 512
+DEFAULT_CLOCK_COLOR = '#000000'
+DEFAULT_BACKGROUND_COLOR = '#FFFDD0'
+
+FONT_PATH = ".//fonts"

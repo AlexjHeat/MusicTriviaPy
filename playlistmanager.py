@@ -6,8 +6,7 @@ from enum import Enum
 from db import Session, Song, Category, Directory
 from listmodels import CategoryListModel, SongListModel
 from categorydialog import CategoryDialog
-from config import defaultCategory as default
-#from sqlalchemy import select
+from config import DEFAULT_CATEGORY as default
 
 class SongList(Enum):
     NEITHER = 0
@@ -56,9 +55,9 @@ class PlaylistManager:
     def getActiveCategory(self):
         return self.activeCategory
 
-    def getDefaultCategory(self):
+    def getCategories(self):
         session = Session()
-        return session.query(Category).filter(Category.name == default).one()
+        return session.query(Category).filter(Category.name != default).all()
 
     def createCategory(self, parent):
         dialog = CategoryDialog(parent)
@@ -69,7 +68,7 @@ class PlaylistManager:
                 session.add(cat)
                 session.commit()
             except sqlalchemy.exc.IntegrityError:
-                QMessageBox.critical(parent, 'Error', "Category name already exists!")
+                QMessageBox.critical(parent, 'Error', f"Category name '{cat.name}' already exists!")
             else:
                 session.expunge(cat)
                 self.categoriesModel.append(cat)
@@ -92,6 +91,11 @@ class PlaylistManager:
                 cat = session.query(Category).filter(Category.name == self.activeCategory.name).one()
                 cat.name = data.name
                 cat.description = data.description
+                cat.nameColor  = data.nameColor
+                cat.backgroundColor = data.backgroundColor
+                cat.clockColor = data.clockColor
+                cat.nameFont = data.nameFont
+                cat.clockFont = data.clockFont
                 session.commit()
             except sqlalchemy.exc.IntegrityError:
                 QMessageBox.critical(parent, 'Error', "Category name already exists!")

@@ -6,38 +6,38 @@ from db import Song
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
 from filemanager import FileManager
+from config import MAX_ROUNDS
 
-MAX_ROUNDS = 10
 
 class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
         self.displayWindow = DisplayWindow(self, self.ui.guessTime.value())
-
         self.playlistManager = PlaylistManager()
         self.fileManager = FileManager(self)
-        self.ui.categoriesListView.setModel(self.playlistManager.categoriesModel)
-        self.ui.songsInListView.setModel(self.playlistManager.songsInModel)
-        self.ui.songsOutListView.setModel(self.playlistManager.songsOutModel)
-        self.setDisplayCategory(default=True)
 
         self.activeSongView = None
         self.activeSongIndex = None
-
+        self.ui.categoriesListView.setModel(self.playlistManager.categoriesModel)
+        self.ui.songsInListView.setModel(self.playlistManager.songsInModel)
+        self.ui.songsOutListView.setModel(self.playlistManager.songsOutModel)
         self.ui.categoriesListView.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        #set validator for ui.startTimeEdit to only accept int
+        self.ui.categoriesListView.setCurrentIndex(self.ui.categoriesListView.model().index(0,0))
+        self.loadCategoryPlaylist(self.ui.categoriesListView.currentIndex())
 
         self.round = 0
         self.playbackTimer = QTimer()
         self.playbackTimer.timeout.connect(self.updatePlaybackTime)
 
+        #Display Window
+
+
         #connections
-        self.ui.categoriesListView.clicked.connect(self.loadCategoryPlaylist)
+        self.ui.categoriesListView.doubleClicked.connect(self.loadCategoryPlaylist)
         self.ui.categoryCreateButton.released.connect(self.createCategory)
         self.ui.categoryEditButton.released.connect(self.editCategory)
         self.ui.categoryRemoveButton.released.connect(self.removeCategory)
-        self.ui.categoryLoadButton.released.connect(self.setDisplayCategory)
         self.ui.songsInListView.clicked.connect(self.loadSongIn)
         self.ui.songsOutListView.clicked.connect(self.loadSongOut)
         self.ui.addSongsButton.released.connect(self.addSongs)
@@ -53,28 +53,21 @@ class ControlWindow(QMainWindow):
         self.ui.menuNewGame.triggered.connect(self.newGame)
         self.ui.menuEndGame.triggered.connect(self.endGame)
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
+        self.ui.menuShowCategories.triggered.connect(self.showCategories)
 
         self.ui.show()
-
 
 #   ~~~CATEGORIES~~~
     def loadCategoryPlaylist(self, index:QModelIndex):
         #save currently selected song info before loading new category
         if self.activeSongIndex:
             self.updateActiveSong()
-        #load new category information throughout Control Window, BUT NOT DISPLAY WINDOW
+        #load new category information to both Control & Display Window
         cat = self.playlistManager.setActiveCategory(index)
         if cat:
             self.ui.categoryDescriptionEdit.setText(cat.description)
             self.ui.currentCategoryLabel.setText(f'Current Category: {cat.name}')
-
-    def setDisplayCategory(self, default=False):
-        if default:
-            category = self.playlistManager.getDefaultCategory()
-        else:
-            category = self.playlistManager.getActiveCategory()
-        if category:
-            self.displayWindow.loadCategory(category)
+            self.displayWindow.loadCategory(cat)
 
     def createCategory(self):
         #Opens category dialog
@@ -194,7 +187,7 @@ class ControlWindow(QMainWindow):
     def updatePlaybackTime(self):
         currentPos = self.displayWindow.getCurrentPosition()
         trackLength = self.displayWindow.getTrackLength()
-        if currentPos is False:
+        if currentPos is None:
             self.playbackTimer.stop()
             self.stop()
         self.ui.currentPosLabel.setText(f'{int(currentPos/60)}:{int((currentPos%60)/10)}{(currentPos%60)%10}')
@@ -233,4 +226,8 @@ class ControlWindow(QMainWindow):
 #   ~~~DISPLAY~~~
     def fullscreen(self):
         self.displayWindow.setFullscreen(self.ui.menuFullscreen.isChecked())
+
+    def showCategories(self):
+        categories = self.playlistManager.getCategories()
+        self.displayWindow.showCategories(self.ui.menuShowCategories.isChecked(), categories)
 

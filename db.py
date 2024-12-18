@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, String
 from sqlalchemy.orm import relationship
-from config import defaultCategory
+from config import DEFAULT_CATEGORY as default
 
 #initialize Base & Session objects
 Base = declarative_base()
@@ -27,10 +27,15 @@ class Category(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True, nullable=False)
     description = Column(String)
-    folderName = Column(String, unique=True)
-    backgroundColorHex = Column(String)
-    clockColorHex = Column(String)
-    lcdColorHex = Column(String)
+    nameColor = Column(String)
+    backgroundColor = Column(String)
+    clockColor = Column(String)
+    nameFont = Column(String)
+    clockFont = Column(String)
+    clockImage = Column(String)
+    countdownBackgroundImage = Column(String)
+    videoBackgroundImage = Column(String)
+    transitionBackgroundImage = Column(String)
     songs = relationship('Song', secondary=category_song_association, back_populates='categories')
 
 class Song(Base):
@@ -62,13 +67,14 @@ class Directory(Base):
 
 def createDefaultCategory():
     session = Session()
-    cat = Category( name=defaultCategory,
-                    description='All songs are added to this category by default.',
-                    folderName="./images/default/",
-                    backgroundColorHex="3652AC",
-                    clockColorHex="85A2FD",
-                    lcdColorHex="FFFFFF"
+    cat = Category( name=default,
+                    description='All songs are added to this category by default.'
                     )
     #add all songs to category
     session.add(cat)
     session.commit()
+
+def createTables():
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    createDefaultCategory()

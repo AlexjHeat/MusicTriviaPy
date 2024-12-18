@@ -34,6 +34,9 @@ class Ui_MainWindow(object):
         self.menuFullscreen = QAction(MainWindow)
         self.menuFullscreen.setObjectName(u"menuFullscreen")
         self.menuFullscreen.setCheckable(True)
+        self.menuShowCategories = QAction(MainWindow)
+        self.menuShowCategories.setObjectName(u"menuShowCategories")
+        self.menuShowCategories.setCheckable(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -46,24 +49,6 @@ class Ui_MainWindow(object):
         self.categoriesListView.setObjectName(u"categoriesListView")
 
         self.verticalLayout.addWidget(self.categoriesListView)
-
-        self.horizontalLayout_10 = QHBoxLayout()
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_11)
-
-        self.categoryLoadButton = QPushButton(self.layoutWidget)
-        self.categoryLoadButton.setObjectName(u"categoryLoadButton")
-
-        self.horizontalLayout_10.addWidget(self.categoryLoadButton)
-
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_10)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_10)
 
         self.categoryDescriptionEdit = QTextEdit(self.layoutWidget)
         self.categoryDescriptionEdit.setObjectName(u"categoryDescriptionEdit")
@@ -364,6 +349,7 @@ class Ui_MainWindow(object):
         self.menuCategory.addAction(self.menuNewGame)
         self.menuCategory.addAction(self.menuEndGame)
         self.menuView.addAction(self.menuFullscreen)
+        self.menuView.addAction(self.menuShowCategories)
 
         self.retranslateUi(MainWindow)
 
@@ -375,7 +361,7 @@ class Ui_MainWindow(object):
         self.menuNewGame.setText(QCoreApplication.translate("MainWindow", u"New Game", None))
         self.menuEndGame.setText(QCoreApplication.translate("MainWindow", u"End Game", None))
         self.menuFullscreen.setText(QCoreApplication.translate("MainWindow", u"Fullscreen", None))
-        self.categoryLoadButton.setText(QCoreApplication.translate("MainWindow", u"Load to Display", None))
+        self.menuShowCategories.setText(QCoreApplication.translate("MainWindow", u"Show Categories", None))
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))

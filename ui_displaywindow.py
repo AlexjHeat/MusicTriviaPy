@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLCDNumber, QLabel, QLayout,
-    QMainWindow, QSizePolicy, QStackedWidget, QVBoxLayout,
+from PySide6.QtWidgets import (QApplication, QLabel, QLayout, QMainWindow,
+    QScrollArea, QSizePolicy, QStackedWidget, QVBoxLayout,
     QWidget)
 
 class Ui_MainWindow(object):
@@ -32,14 +32,14 @@ class Ui_MainWindow(object):
         self.mainDisplay = QStackedWidget(self.centralwidget)
         self.mainDisplay.setObjectName(u"mainDisplay")
         self.mainDisplay.setGeometry(QRect(372, 240, 1181, 621))
-        self.video = QWidget()
-        self.video.setObjectName(u"video")
+        self.videoPage = QWidget()
+        self.videoPage.setObjectName(u"videoPage")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.video.sizePolicy().hasHeightForWidth())
-        self.video.setSizePolicy(sizePolicy)
-        self.verticalLayout_2 = QVBoxLayout(self.video)
+        sizePolicy.setHeightForWidth(self.videoPage.sizePolicy().hasHeightForWidth())
+        self.videoPage.setSizePolicy(sizePolicy)
+        self.verticalLayout_2 = QVBoxLayout(self.videoPage)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -50,71 +50,52 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.videoLayout)
 
-        self.mainDisplay.addWidget(self.video)
-        self.countdown = QWidget()
-        self.countdown.setObjectName(u"countdown")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.countdown.sizePolicy().hasHeightForWidth())
-        self.countdown.setSizePolicy(sizePolicy1)
-        self.countdown.setMinimumSize(QSize(0, 0))
-        self.verticalLayout_3 = QVBoxLayout(self.countdown)
+        self.mainDisplay.addWidget(self.videoPage)
+        self.countdownPage = QWidget()
+        self.countdownPage.setObjectName(u"countdownPage")
+        sizePolicy.setHeightForWidth(self.countdownPage.sizePolicy().hasHeightForWidth())
+        self.countdownPage.setSizePolicy(sizePolicy)
+        self.countdownPage.setMinimumSize(QSize(0, 0))
+        self.verticalLayout_3 = QVBoxLayout(self.countdownPage)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.countdownLCD = QLCDNumber(self.countdown)
-        self.countdownLCD.setObjectName(u"countdownLCD")
-        self.countdownLCD.setEnabled(True)
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.countdownLCD.sizePolicy().hasHeightForWidth())
-        self.countdownLCD.setSizePolicy(sizePolicy2)
-        self.countdownLCD.setMinimumSize(QSize(200, 200))
-        self.countdownLCD.setStyleSheet(u"background-color: rgb(133, 162, 253);")
-        self.countdownLCD.setDigitCount(2)
-        self.countdownLCD.setProperty("intValue", 30)
+        self.countdownLabel = QLabel(self.countdownPage)
+        self.countdownLabel.setObjectName(u"countdownLabel")
+        self.countdownLabel.setStyleSheet(u"")
+        self.countdownLabel.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_3.addWidget(self.countdownLCD)
+        self.verticalLayout_3.addWidget(self.countdownLabel)
 
-        self.mainDisplay.addWidget(self.countdown)
+        self.mainDisplay.addWidget(self.countdownPage)
+        self.categoriesPage = QWidget()
+        self.categoriesPage.setObjectName(u"categoriesPage")
+        sizePolicy.setHeightForWidth(self.categoriesPage.sizePolicy().hasHeightForWidth())
+        self.categoriesPage.setSizePolicy(sizePolicy)
+        self.verticalLayout = QVBoxLayout(self.categoriesPage)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.categoryScroll = QScrollArea(self.categoriesPage)
+        self.categoryScroll.setObjectName(u"categoryScroll")
+        self.categoryScroll.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1179, 619))
+        self.categoryScroll.setWidget(self.scrollAreaWidgetContents)
+
+        self.verticalLayout.addWidget(self.categoryScroll)
+
+        self.mainDisplay.addWidget(self.categoriesPage)
         self.backgroundImageLabel = QLabel(self.centralwidget)
         self.backgroundImageLabel.setObjectName(u"backgroundImageLabel")
         self.backgroundImageLabel.setGeometry(QRect(0, 0, 1921, 1081))
         self.backgroundImageLabel.setStyleSheet(u"")
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(620, 0, 661, 241))
-        self.RoundInfo = QVBoxLayout(self.widget)
-        self.RoundInfo.setSpacing(6)
-        self.RoundInfo.setObjectName(u"RoundInfo")
-        self.RoundInfo.setContentsMargins(0, 6, 0, 6)
-        self.roundLabel = QLabel(self.widget)
-        self.roundLabel.setObjectName(u"roundLabel")
-        sizePolicy.setHeightForWidth(self.roundLabel.sizePolicy().hasHeightForWidth())
-        self.roundLabel.setSizePolicy(sizePolicy)
-        self.roundLabel.setStyleSheet(u"font: 700 48pt \"Segoe UI\";\n"
-"color: #C0BBFE;")
-        self.roundLabel.setAlignment(Qt.AlignCenter)
-
-        self.RoundInfo.addWidget(self.roundLabel)
-
-        self.songLabel = QLabel(self.widget)
-        self.songLabel.setObjectName(u"songLabel")
-        sizePolicy.setHeightForWidth(self.songLabel.sizePolicy().hasHeightForWidth())
-        self.songLabel.setSizePolicy(sizePolicy)
-        self.songLabel.setStyleSheet(u"font: 700 36pt \"Segoe UI\";\n"
-"color: #C0BBFE;")
-        self.songLabel.setAlignment(Qt.AlignCenter)
-
-        self.RoundInfo.addWidget(self.songLabel)
-
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
 
-        self.mainDisplay.setCurrentIndex(1)
+        self.mainDisplay.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -122,8 +103,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.countdownLabel.setText("")
         self.backgroundImageLabel.setText("")
-        self.roundLabel.setText("")
-        self.songLabel.setText("")
     # retranslateUi
 
