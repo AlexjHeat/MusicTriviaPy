@@ -16,11 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QLineEdit,
-    QListView, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSlider, QSpacerItem,
-    QSpinBox, QSplitter, QStatusBar, QTextEdit,
-    QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
+    QLineEdit, QListView, QMainWindow, QMenu,
+    QMenuBar, QPushButton, QSizePolicy, QSlider,
+    QSpacerItem, QSpinBox, QSplitter, QStatusBar,
+    QTextEdit, QToolButton, QTreeView, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -95,10 +96,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.currentCategoryLabel)
 
-        self.songsInListView = QListView(self.layoutWidget1)
-        self.songsInListView.setObjectName(u"songsInListView")
+        self.songsOutTreeView = QTreeView(self.layoutWidget1)
+        self.songsOutTreeView.setObjectName(u"songsOutTreeView")
 
-        self.verticalLayout_2.addWidget(self.songsInListView)
+        self.verticalLayout_2.addWidget(self.songsOutTreeView)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -130,10 +131,37 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
-        self.songsOutListView = QListView(self.layoutWidget1)
-        self.songsOutListView.setObjectName(u"songsOutListView")
+        self.songsInTreeView = QTreeView(self.layoutWidget1)
+        self.songsInTreeView.setObjectName(u"songsInTreeView")
 
-        self.verticalLayout_2.addWidget(self.songsOutListView)
+        self.verticalLayout_2.addWidget(self.songsInTreeView)
+
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_10)
+
+        self.createGroupBTN = QPushButton(self.layoutWidget1)
+        self.createGroupBTN.setObjectName(u"createGroupBTN")
+
+        self.horizontalLayout_10.addWidget(self.createGroupBTN)
+
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_11)
+
+        self.removeGroupBTN = QPushButton(self.layoutWidget1)
+        self.removeGroupBTN.setObjectName(u"removeGroupBTN")
+
+        self.horizontalLayout_10.addWidget(self.removeGroupBTN)
+
+        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_12)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -141,10 +169,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
 
-        self.addSongsButton = QPushButton(self.layoutWidget1)
-        self.addSongsButton.setObjectName(u"addSongsButton")
+        self.updateSongsBTN = QPushButton(self.layoutWidget1)
+        self.updateSongsBTN.setObjectName(u"updateSongsBTN")
 
-        self.horizontalLayout_3.addWidget(self.addSongsButton)
+        self.horizontalLayout_3.addWidget(self.updateSongsBTN)
 
         self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -368,7 +396,12 @@ class Ui_MainWindow(object):
         self.currentCategoryLabel.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
         self.moveSongInButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.addSongsButton.setText(QCoreApplication.translate("MainWindow", u"Add Songs", None))
+        self.createGroupBTN.setText(QCoreApplication.translate("MainWindow", u"Create Group", None))
+        self.removeGroupBTN.setText(QCoreApplication.translate("MainWindow", u"Remove Group", None))
+#if QT_CONFIG(tooltip)
+        self.updateSongsBTN.setToolTip(QCoreApplication.translate("MainWindow", u"Updates lists to the current contents of the song folder", None))
+#endif // QT_CONFIG(tooltip)
+        self.updateSongsBTN.setText(QCoreApplication.translate("MainWindow", u"Update Songs", None))
         self.removeSongButton.setText(QCoreApplication.translate("MainWindow", u"Remove Song", None))
         self.fileNameLabel.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))

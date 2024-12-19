@@ -3,10 +3,11 @@ from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category, Directory
-from listmodels import CategoryListModel, SongListModel
+from db import Session, Song, Category, Group, Directory
+from listmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
-from config import DEFAULT_CATEGORY as default
+from config import DEFAULT_CATEGORY, SONG_PATH
+import os
 
 class SongList(Enum):
     NEITHER = 0
@@ -18,8 +19,8 @@ class PlaylistManager:
     def __init__(self):
         session = Session()
         self.categoriesModel = CategoryListModel(session.query(Category).all())
-        self.songsInModel = SongListModel()
-        self.songsOutModel = SongListModel()
+        self.songsInModel = SongTreeModel()
+        self.songsOutModel = SongTreeModel()
 
         self.activeCategory = None
         self.activeCategoryIndex = None
@@ -38,11 +39,11 @@ class PlaylistManager:
 
         #load songs belonging to the active category to model
         session = Session()
-        songs = session.query(Song).filter(Song.categories.any(Category.name == self.activeCategory.name)).all()
+        songs = session.query(Song).filter(Song.categories.any(Category.name == self.activeCategory.name), Song.missingFile == False).all()
         self.songsInModel.loadData(songs)
 
         #load songs NOT belonging to the active category to model
-        songs = session.query(Song).filter(~Song.categories.any(Category.id == self.activeCategory.id)).all()
+        songs = session.query(Song).filter(~Song.categories.any(Category.id == self.activeCategory.id), Song.missingFile == False).all()
         self.songsOutModel.loadData(songs)
 
         #no active song now
@@ -57,7 +58,28 @@ class PlaylistManager:
 
     def getCategories(self):
         session = Session()
-        return session.query(Category).filter(Category.name != default).all()
+        return session.query(Category).filter(Category.name != DEFAULT_CATEGORY).all()
+
+    def scanSongFolder(self):
+        session = Session()
+        song_db = session.query(Song).all()
+        song_files = [f for f in os.listdir(SONG_PATH) if os.path.isfile(f'{SONG_PATH}/{f}')]
+        for file in song_files:
+            found = False
+            for i in range(len(song_db)):
+                if file == song_db[i].fileName:
+                    song_db.remove(i)
+                    song_db[i].missingFile = True
+                    found = True
+                    break
+            if not found:
+                s = Song(fileName=file)
+                session.add(s)
+
+        for song in song_db:
+            song.missingFile = True
+        session.commit()
+        session.close()
 
     def createCategory(self, parent):
         dialog = CategoryDialog(parent)
@@ -75,9 +97,16 @@ class PlaylistManager:
                 return True
         return False
 
+    def createGroup(self, name: str):
+        group = Group(name=name)
+        session = Session()
+        session.add(group)
+        session.commit()
+        session.close()
+    '''
     def editActiveCategory(self, parent):
         #Make sure default category is not being edited
-        if self.activeCategory.name == default:
+        if self.activeCategory.name == DEFAULT_CATEGORY:
             QMessageBox.warning(parent, 'Warning', "Cannot edit default category!")
             return False
 
@@ -108,7 +137,7 @@ class PlaylistManager:
 
     def removeActiveCategory(self, parent):
         #Make sure default category is not being edited
-        if self.activeCategory.name == default:
+        if self.activeCategory.name == DEFAULT_CATEGORY:
             QMessageBox.warning(parent, 'Warning', "Cannot remove default category!")
             return False
 
@@ -161,7 +190,7 @@ class PlaylistManager:
         files, filter = QFileDialog().getOpenFileNames(parent, "Select song files to add", ".", "multimedia(*.wav *.mp3 *.mp4 *.m4a *.flac)")
         #Check if file already exists in playlist, then add default category to each song if a default category is set
         session = Session()
-        default_cat = session.query(Category).filter(Category.name == default).one()
+        default_cat = session.query(Category).filter(Category.name == DEFAULT_CATEGORY).one()
         pathChecked = False
         for file in files:
             file = QFileInfo(file)
@@ -247,3 +276,5 @@ class PlaylistManager:
         self.activeSong = song
         self.activeSongModel = self.songsOutModel
         self.activeSongIndex = self.activeSongModel.index(self.activeSongModel.rowCount()-1)
+    '''
+

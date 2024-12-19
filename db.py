@@ -3,7 +3,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, String
+from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from config import DEFAULT_CATEGORY as default
 
@@ -38,9 +38,16 @@ class Category(Base):
     transitionBackgroundImage = Column(String)
     songs = relationship('Song', secondary=category_song_association, back_populates='categories')
 
+class Group(Base):
+    __tablename__ = "Groups"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+    songs = relationship('Song', back_populates='group')
+
 class Song(Base):
     __tablename__ = "Songs"
     id = Column(Integer, primary_key=True, autoincrement=True)
+    groupId = Column(String, ForeignKey(Group.id))
     fileName = Column(String, unique=True, nullable=False)
     anime = Column(String)
     opNum = Column(Integer, default=0)
@@ -48,6 +55,8 @@ class Song(Base):
     title = Column(String)
     startTime = Column(Integer)
     categories = relationship('Category', secondary=category_song_association, back_populates='songs')
+    group = relationship('Group', back_populates='songs')
+    missingFile = Column(Boolean, default=False)
 
     def __str__(self):
         str = ""
@@ -60,6 +69,8 @@ class Song(Base):
         else:
             str = self.fileName
         return str
+
+
 
 class Directory(Base):
     __tablename__ = "Directories"

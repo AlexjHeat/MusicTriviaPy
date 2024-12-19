@@ -105,7 +105,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="songsInListView"/>
+      <widget class="QTreeView" name="songsOutTreeView"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -174,7 +174,64 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="songsOutListView"/>
+      <widget class="QTreeView" name="songsInTreeView"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="createGroupBTN">
+         <property name="text">
+          <string>Create Group</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeGroupBTN">
+         <property name="text">
+          <string>Remove Group</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -192,9 +249,12 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="addSongsButton">
+        <widget class="QPushButton" name="updateSongsBTN">
+         <property name="toolTip">
+          <string>Updates lists to the current contents of the song folder</string>
+         </property>
          <property name="text">
-          <string>Add Songs</string>
+          <string>Update Songs</string>
          </property>
         </widget>
        </item>
