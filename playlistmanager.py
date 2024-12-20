@@ -3,8 +3,8 @@ from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category, Group, Directory
-from listmodels import CategoryListModel, SongTreeModel
+from db import Session, Song, Category
+from viewmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
 from config import DEFAULT_CATEGORY, SONG_PATH
 import os
@@ -61,23 +61,29 @@ class PlaylistManager:
         return session.query(Category).filter(Category.name != DEFAULT_CATEGORY).all()
 
     def scanSongFolder(self):
+        song_files = [f for f in os.listdir(SONG_PATH) if os.path.isfile(f'{SONG_PATH}/{f}')]
         session = Session()
         song_db = session.query(Song).all()
-        song_files = [f for f in os.listdir(SONG_PATH) if os.path.isfile(f'{SONG_PATH}/{f}')]
-        for file in song_files:
-            found = False
-            for i in range(len(song_db)):
-                if file == song_db[i].fileName:
-                    song_db.remove(i)
-                    song_db[i].missingFile = True
-                    found = True
-                    break
-            if not found:
-                s = Song(fileName=file)
-                session.add(s)
+        default_cat = session.query(Category).filter(Category.name == DEFAULT_CATEGORY).one()
 
         for song in song_db:
             song.missingFile = True
+
+        for file in song_files:
+            found = False
+            for song in song_db:
+                if file == song.fileName:
+                    song.missingFile = False
+                    found = True
+                    break
+            if not found:
+                song = Song(fileName=file)
+                if default_cat:
+                    song.categories.append(default_cat)
+
+                session.add(song)
+
+
         session.commit()
         session.close()
 
@@ -97,13 +103,7 @@ class PlaylistManager:
                 return True
         return False
 
-    def createGroup(self, name: str):
-        group = Group(name=name)
-        session = Session()
-        session.add(group)
-        session.commit()
-        session.close()
-    '''
+
     def editActiveCategory(self, parent):
         #Make sure default category is not being edited
         if self.activeCategory.name == DEFAULT_CATEGORY:
@@ -171,8 +171,13 @@ class PlaylistManager:
         #Update song in database
         if self.activeSong == None:
             return False
+
         session = Session()
         song = session.query(Song).filter(Song.id == self.activeSong.id).one()
+        if song.group != data.group:
+            pass    #
+
+        song.group = data.group
         song.anime = data.anime
         song.opNum = data.opNum
         song.title = data.title
@@ -180,38 +185,14 @@ class PlaylistManager:
         song.startTime = data.startTime
         session.commit()
 
+
         #update song in model
         session.expunge(song)
         self.activeSongModel.setData(self.activeSongIndex, song)
         self.activeSong = song
         return True
 
-    def addSongs(self, parent):
-        files, filter = QFileDialog().getOpenFileNames(parent, "Select song files to add", ".", "multimedia(*.wav *.mp3 *.mp4 *.m4a *.flac)")
-        #Check if file already exists in playlist, then add default category to each song if a default category is set
-        session = Session()
-        default_cat = session.query(Category).filter(Category.name == DEFAULT_CATEGORY).one()
-        pathChecked = False
-        for file in files:
-            file = QFileInfo(file)
-
-            #Add song to database, if file name does not already exist
-            name = file.fileName()
-            if session.query(Song).filter(Song.fileName == name).scalar() == None:
-                song = Song(fileName=name)
-                session.add(song)
-                if default_cat:
-                    song.categories.append(default_cat)
-
-            #Add file path to database, if it does not already exist
-            if pathChecked == False:
-                dir = file.absolutePath() + "\\"
-                if session.query(Directory).filter(Directory.dir == dir).scalar() == None:
-                    directory = Directory(dir=dir)
-                    session.add(directory)
-                pathChecked = True
-        session.commit()
-
+    '''
     def removeActiveSong(self, parent):
         #Make user confirm to prevent accidental loss of data
         warning_msg = QMessageBox.warning(

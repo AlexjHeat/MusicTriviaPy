@@ -10,7 +10,7 @@
         "displaywindow.ui",
         "filemanager.py",
         "fontlib.py",
-        "listmodels.py",
+        "viewmodels.py",
         "main.py",
         "musictrivia.db",
         "playlistmanager.py",

@@ -36,10 +36,8 @@ class ControlWindow(QMainWindow):
         self.ui.categoryEditButton.released.connect(self.editCategory)
         self.ui.categoryRemoveButton.released.connect(self.removeCategory)
 
-        self.ui.createGroupBTN.released.connect(self.createGroup)
-        self.ui.removeGroupBTN.released.connect(self.removeGroup)
-        #self.ui.songsInTreeView.clicked.connect(self.loadSongIn)
-        #self.ui.songsOutTreeView.clicked.connect(self.loadSongOut)
+        self.ui.songsInTreeView.clicked.connect(self.loadSongIn)
+        self.ui.songsOutTreeView.clicked.connect(self.loadSongOut)
         self.ui.updateSongsBTN.released.connect(self.updateSongs)
         #self.ui.removeSongButton.released.connect(self.removeSong)
         #self.ui.moveSongInButton.released.connect(self.addSongToCategory)
@@ -56,8 +54,7 @@ class ControlWindow(QMainWindow):
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
         self.ui.menuShowCategories.triggered.connect(self.showCategories)
 
-        self.ui.show()
-
+        self.ui.show()       
 #   ~~~CATEGORIES~~~
     def loadCategoryPlaylist(self, index:QModelIndex):
         #save currently selected song info before loading new category
@@ -87,30 +84,20 @@ class ControlWindow(QMainWindow):
             index = self.ui.categoriesListView.currentIndex()
             self.loadCategoryPlaylist(index)
 
-#   ~~~GROUPS~~~
-    def createGroup(self):
-        name, ok = QInputDialog().getText(self, "Create New Group",
-                                                "Name:", QLineEdit.Normal)
-        if ok and name:
-            self.playlistManager.createGroup(name)
-
-    def removeGroup(self):
-        pass
-
     def moveSongInto(self):
         pass
 
     def moveSongOutOf(self):
         pass
 
-    '''
+
 #   ~~~SONG LISTVIEWS~~~
     #Sets the currently selected song in the songIn list view as active, then loads its data
     def loadSongIn(self):
         if self.activeSongIndex:
             self.updateActiveSong()
-        self.ui.songsOutListView.clearSelection()
-        self.activeSongView = self.ui.songsInListView
+        self.ui.songsOutTreeView.clearSelection()
+        self.activeSongView = self.ui.songsInTreeView
         self.activeSongIndex = self.activeSongView.currentIndex()
         song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=True)
         self.loadSongData(song)
@@ -119,8 +106,8 @@ class ControlWindow(QMainWindow):
     def loadSongOut(self):
         if self.activeSongIndex:
             self.updateActiveSong()
-        self.ui.songsInListView.clearSelection()
-        self.activeSongView = self.ui.songsOutListView
+        self.ui.songsInTreeView.clearSelection()
+        self.activeSongView = self.ui.songsOutTreeView
         self.activeSongIndex = self.activeSongView.currentIndex()
         song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=False)
         self.loadSongData(song)
@@ -128,6 +115,7 @@ class ControlWindow(QMainWindow):
     def loadSongData(self, song):
         if song:
             self.ui.fileNameLabel.setText(song.fileName)
+            self.ui.songGroupEdit.setText(song.group)
             self.ui.songAnimeEdit.setText(song.anime)
             self.ui.songOpSpinBox.setValue(song.opNum)
             self.ui.songTitleEdit.setText(song.title)
@@ -140,6 +128,7 @@ class ControlWindow(QMainWindow):
     def updateActiveSong(self):
         song = Song()
         #Get song data from UI
+        song.group = self.ui.songGroupEdit.text()
         song.anime = self.ui.songAnimeEdit.text()
         song.opNum = self.ui.songOpSpinBox.value()
         song.title = self.ui.songTitleEdit.text()
@@ -149,13 +138,14 @@ class ControlWindow(QMainWindow):
         self.playlistManager.updateActiveSong(song)
 
         #Clear the song data from UI
+        self.ui.songGroupEdit.clear()
         self.ui.songAnimeEdit.clear()
         self.ui.songOpSpinBox.setValue(0)
         self.ui.songTitleEdit.clear()
         self.ui.songArtistEdit.clear()
         self.ui.songStartTimeEdit.clear()
         self.activeSongIndex = None
-    '''
+
 #   ~~~SONGS~~~
     def updateSongs(self):
         self.playlistManager.scanSongFolder()

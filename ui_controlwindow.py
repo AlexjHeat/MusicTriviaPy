@@ -96,10 +96,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.currentCategoryLabel)
 
-        self.songsOutTreeView = QTreeView(self.layoutWidget1)
-        self.songsOutTreeView.setObjectName(u"songsOutTreeView")
+        self.songsInTreeView = QTreeView(self.layoutWidget1)
+        self.songsInTreeView.setObjectName(u"songsInTreeView")
+        self.songsInTreeView.setUniformRowHeights(False)
+        self.songsInTreeView.setSortingEnabled(False)
+        self.songsInTreeView.setHeaderHidden(False)
 
-        self.verticalLayout_2.addWidget(self.songsOutTreeView)
+        self.verticalLayout_2.addWidget(self.songsInTreeView)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -131,37 +134,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
-        self.songsInTreeView = QTreeView(self.layoutWidget1)
-        self.songsInTreeView.setObjectName(u"songsInTreeView")
+        self.songsOutTreeView = QTreeView(self.layoutWidget1)
+        self.songsOutTreeView.setObjectName(u"songsOutTreeView")
 
-        self.verticalLayout_2.addWidget(self.songsInTreeView)
-
-        self.horizontalLayout_10 = QHBoxLayout()
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_10)
-
-        self.createGroupBTN = QPushButton(self.layoutWidget1)
-        self.createGroupBTN.setObjectName(u"createGroupBTN")
-
-        self.horizontalLayout_10.addWidget(self.createGroupBTN)
-
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_11)
-
-        self.removeGroupBTN = QPushButton(self.layoutWidget1)
-        self.removeGroupBTN.setObjectName(u"removeGroupBTN")
-
-        self.horizontalLayout_10.addWidget(self.removeGroupBTN)
-
-        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_12)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
+        self.verticalLayout_2.addWidget(self.songsOutTreeView)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -201,6 +177,26 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.fileNameLabel)
 
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.label_6 = QLabel(self.layoutWidget2)
+        self.label_6.setObjectName(u"label_6")
+
+        self.horizontalLayout_11.addWidget(self.label_6)
+
+        self.songGroupEdit = QLineEdit(self.layoutWidget2)
+        self.songGroupEdit.setObjectName(u"songGroupEdit")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.songGroupEdit.sizePolicy().hasHeightForWidth())
+        self.songGroupEdit.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_11.addWidget(self.songGroupEdit)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_11)
+
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.label = QLabel(self.layoutWidget2)
@@ -210,9 +206,6 @@ class Ui_MainWindow(object):
 
         self.songAnimeEdit = QLineEdit(self.layoutWidget2)
         self.songAnimeEdit.setObjectName(u"songAnimeEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.songAnimeEdit.sizePolicy().hasHeightForWidth())
         self.songAnimeEdit.setSizePolicy(sizePolicy)
 
@@ -396,14 +389,13 @@ class Ui_MainWindow(object):
         self.currentCategoryLabel.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
         self.moveSongInButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.createGroupBTN.setText(QCoreApplication.translate("MainWindow", u"Create Group", None))
-        self.removeGroupBTN.setText(QCoreApplication.translate("MainWindow", u"Remove Group", None))
 #if QT_CONFIG(tooltip)
         self.updateSongsBTN.setToolTip(QCoreApplication.translate("MainWindow", u"Updates lists to the current contents of the song folder", None))
 #endif // QT_CONFIG(tooltip)
         self.updateSongsBTN.setText(QCoreApplication.translate("MainWindow", u"Update Songs", None))
         self.removeSongButton.setText(QCoreApplication.translate("MainWindow", u"Remove Song", None))
         self.fileNameLabel.setText("")
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Group", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"OP", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Title", None))

@@ -38,24 +38,17 @@ class Category(Base):
     transitionBackgroundImage = Column(String)
     songs = relationship('Song', secondary=category_song_association, back_populates='categories')
 
-class Group(Base):
-    __tablename__ = "Groups"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, unique=True, nullable=False)
-    songs = relationship('Song', back_populates='group')
-
 class Song(Base):
     __tablename__ = "Songs"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    groupId = Column(String, ForeignKey(Group.id))
     fileName = Column(String, unique=True, nullable=False)
+    group = Column(String)
     anime = Column(String)
     opNum = Column(Integer, default=0)
     artist = Column(String)
     title = Column(String)
     startTime = Column(Integer)
     categories = relationship('Category', secondary=category_song_association, back_populates='songs')
-    group = relationship('Group', back_populates='songs')
     missingFile = Column(Boolean, default=False)
 
     def __str__(self):
