@@ -159,6 +159,7 @@ class SongTreeModel(QAbstractItemModel):
             self.endRemoveRows()
 
     def changeGroup(self, songIndex: QModelIndex, group: str):
+        #Remove from old group
         item = songIndex.internalPointer()
         self.beginRemoveRows(songIndex.parent(), songIndex.row(), songIndex.row())
         oldGroupItem = self.getGroupItem(item.data.group)
@@ -166,13 +167,12 @@ class SongTreeModel(QAbstractItemModel):
         self.endRemoveRows()
         self.deleteIfChildless(songIndex.parent())
 
+        #Add to new group
         newGroupItem = self.getGroupItem(group)
-
         if newGroupItem == self.rootItem:
             newGroupIndex = QModelIndex()
         else:
             newGroupIndex = self.index(self.rootItem.childCount(), 0, QModelIndex())
-
         self.beginInsertRows(newGroupIndex, self.rowCount(), self.rowCount())
         newGroupItem.addChild(item)
         item.parent = newGroupItem
@@ -186,6 +186,15 @@ class SongTreeModel(QAbstractItemModel):
             self.changeGroup(index, newData.group)
         item.data = newData
         return True    
+
+    def setGroupName(self, index: QModelIndex, name: str):
+        if index.isValid() is False:
+            return False
+        groupItem = index.internalPointer()
+        groupItem.data = name
+        for songItem in groupItem.children:
+            songItem.data.group = name
+        return True
 
     def addSong(self, song: Song, group=False):
         self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())

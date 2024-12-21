@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category, updateSong, updateCategory
+from db import Session, Song, Category, updateSong, updateCategory, updateGroup
 from viewmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
 from config import DEFAULT_CATEGORY, SONG_PATH
@@ -141,22 +141,23 @@ class PlaylistManager:
         self.activeSongIndex = index
         return index.data(Qt.EditRole)
 
-    def updateActiveSong(self, data:Song):
-        if self.activeSongIndex is None or self.activeSongIndex.isValid() is False:
+    def updateActiveSong(self, data: Song):
+        if self.activeSongIndex is None or self.activeSongIndex.data(Qt.WhatsThisRole) != 'song':
             return
+        activeSong = self.activeSongIndex.data(Qt.EditRole)
+        if activeSong is None:
+            return
+        song = updateSong(activeSong.id, data)
+        self.activeSongIndex.model().setSongData(self.activeSongIndex, song)
 
-        if self.activeSongIndex.data(Qt.WhatsThisRole) == 'group':
-            #Call model to update group node's name for all its children
-            #Update all children in database
+    def updateActiveGroup(self, data: str):
+        if self.activeSongIndex is None or self.activeSongIndex.data(Qt.WhatsThisRole) != 'group':
             return
-
-        elif self.activeSongIndex.data(Qt.WhatsThisRole) == 'song':
-            activeSong = self.activeSongIndex.data(Qt.EditRole)
-            if activeSong is None:
-                return
-            song = updateSong(activeSong.id, data)
-            self.activeSongIndex.model().setSongData(self.activeSongIndex, song)
+        activeGroup = self.activeSongIndex.data(Qt.EditRole)
+        if activeGroup is None:
             return
+        updateGroup(activeGroup, data)
+        self.activeSongIndex.model().setGroupName(self.activeSongIndex, data)
 
     def addActiveSongToActiveCategory(self):
         if self.activeSongIndex.data(Qt.WhatsThisRole) == 'group':
@@ -187,47 +188,3 @@ class PlaylistManager:
         self.songsOutModel.addSong(song)
         self.activeSongIndex = None
         return True
-    '''
-    #This action resets the active song
-    def addActiveSongToActiveCategory(self):
-        #Get active category and song from database, add song to category
-        session = Session()
-        cat = session.query(Category).filter(Category.id == self.activeCategory.id).one()
-        song = session.query(Song).filter(Song.id == self.activeSong.id).one()
-        cat.songs.append(song)
-        session.commit()
-
-        #Update change in model
-        session.expunge(cat)
-        session.expunge(song)
-        #self.setActiveCategory(self.activeCategoryIndex)
-        #remove song from songsOutModel
-        #append song to songsInModel
-        self.songsOutModel.removeData(self.activeSongIndex)
-        self.songsInModel.append(song)
-
-        #update activeSong info now that it has moved to the songsIn model
-        self.activeSong = song
-        self.activeSongModel = self.songsInModel
-        self.activeSongIndex = self.activeSongModel.index(self.activeSongModel.rowCount()-1)
-
-    def removeActiveSongFromActiveCategory(self):
-        #Get active category and song from database, add song to category
-        session = Session()
-        cat = session.query(Category).filter(Category.id == self.activeCategory.id).one()
-        song = session.query(Song).filter(Song.id == self.activeSong.id).one()
-        cat.songs.remove(song)
-        session.commit()
-
-        #Update change in model
-        session.expunge(cat)
-        session.expunge(song)
-        self.songsInModel.removeData(self.activeSongIndex)
-        self.songsOutModel.append(song)
-
-        #update activeSong info now that it has moved to the songsOut model
-        self.activeSong = song
-        self.activeSongModel = self.songsOutModel
-        self.activeSongIndex = self.activeSongModel.index(self.activeSongModel.rowCount()-1)
-    '''
-

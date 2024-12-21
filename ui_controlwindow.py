@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout, QHe
     QLabel, QLineEdit, QListView, QMainWindow,
     QMenu, QMenuBar, QPushButton, QSizePolicy,
     QSlider, QSpacerItem, QSpinBox, QSplitter,
-    QStatusBar, QTextEdit, QToolButton, QTreeView,
-    QVBoxLayout, QWidget)
+    QStackedWidget, QStatusBar, QTextEdit, QToolButton,
+    QTreeView, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,58 +45,58 @@ class Ui_MainWindow(object):
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(30, 60, 253, 448))
-        self.verticalLayout = QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.category_layout = QVBoxLayout(self.layoutWidget)
+        self.category_layout.setObjectName(u"category_layout")
+        self.category_layout.setContentsMargins(0, 0, 0, 0)
         self.categoriesListView = QListView(self.layoutWidget)
         self.categoriesListView.setObjectName(u"categoriesListView")
 
-        self.verticalLayout.addWidget(self.categoriesListView)
+        self.category_layout.addWidget(self.categoriesListView)
 
         self.categoryDescriptionEdit = QTextEdit(self.layoutWidget)
         self.categoryDescriptionEdit.setObjectName(u"categoryDescriptionEdit")
         self.categoryDescriptionEdit.setReadOnly(True)
 
-        self.verticalLayout.addWidget(self.categoryDescriptionEdit)
+        self.category_layout.addWidget(self.categoryDescriptionEdit)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.category_button_layout = QHBoxLayout()
+        self.category_button_layout.setObjectName(u"category_button_layout")
         self.categoryCreateButton = QPushButton(self.layoutWidget)
         self.categoryCreateButton.setObjectName(u"categoryCreateButton")
 
-        self.horizontalLayout.addWidget(self.categoryCreateButton)
+        self.category_button_layout.addWidget(self.categoryCreateButton)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer)
+        self.category_button_layout.addItem(self.horizontalSpacer)
 
         self.categoryEditButton = QPushButton(self.layoutWidget)
         self.categoryEditButton.setObjectName(u"categoryEditButton")
 
-        self.horizontalLayout.addWidget(self.categoryEditButton)
+        self.category_button_layout.addWidget(self.categoryEditButton)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+        self.category_button_layout.addItem(self.horizontalSpacer_2)
 
         self.categoryRemoveButton = QPushButton(self.layoutWidget)
         self.categoryRemoveButton.setObjectName(u"categoryRemoveButton")
 
-        self.horizontalLayout.addWidget(self.categoryRemoveButton)
+        self.category_button_layout.addWidget(self.categoryRemoveButton)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.category_layout.addLayout(self.category_button_layout)
 
         self.layoutWidget1 = QWidget(self.centralwidget)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
         self.layoutWidget1.setGeometry(QRect(320, 30, 321, 476))
-        self.verticalLayout_2 = QVBoxLayout(self.layoutWidget1)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.treeview_layout = QVBoxLayout(self.layoutWidget1)
+        self.treeview_layout.setObjectName(u"treeview_layout")
+        self.treeview_layout.setContentsMargins(0, 0, 0, 0)
         self.currentCategoryLabel = QLabel(self.layoutWidget1)
         self.currentCategoryLabel.setObjectName(u"currentCategoryLabel")
 
-        self.verticalLayout_2.addWidget(self.currentCategoryLabel)
+        self.treeview_layout.addWidget(self.currentCategoryLabel)
 
         self.songsInTreeView = QTreeView(self.layoutWidget1)
         self.songsInTreeView.setObjectName(u"songsInTreeView")
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
         self.songsInTreeView.setSortingEnabled(True)
         self.songsInTreeView.setHeaderHidden(True)
 
-        self.verticalLayout_2.addWidget(self.songsInTreeView)
+        self.treeview_layout.addWidget(self.songsInTreeView)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addItem(self.horizontalSpacer_5)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.treeview_layout.addLayout(self.horizontalLayout_2)
 
         self.songsOutTreeView = QTreeView(self.layoutWidget1)
         self.songsOutTreeView.setObjectName(u"songsOutTreeView")
@@ -145,27 +145,35 @@ class Ui_MainWindow(object):
         self.songsOutTreeView.setSortingEnabled(True)
         self.songsOutTreeView.setHeaderHidden(True)
 
-        self.verticalLayout_2.addWidget(self.songsOutTreeView)
+        self.treeview_layout.addWidget(self.songsOutTreeView)
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 481))
-        self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.fileNameLabel = QLabel(self.layoutWidget2)
+        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 368))
+        self.song_layout = QVBoxLayout(self.layoutWidget2)
+        self.song_layout.setObjectName(u"song_layout")
+        self.song_layout.setContentsMargins(0, 0, 0, 0)
+        self.song_group_info_display = QStackedWidget(self.layoutWidget2)
+        self.song_group_info_display.setObjectName(u"song_group_info_display")
+        self.songInfoPage = QWidget()
+        self.songInfoPage.setObjectName(u"songInfoPage")
+        self.verticalLayout_2 = QVBoxLayout(self.songInfoPage)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.fileNameLabel = QLabel(self.songInfoPage)
         self.fileNameLabel.setObjectName(u"fileNameLabel")
 
-        self.verticalLayout_3.addWidget(self.fileNameLabel)
+        self.verticalLayout.addWidget(self.fileNameLabel)
 
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.label_6 = QLabel(self.layoutWidget2)
+        self.label_6 = QLabel(self.songInfoPage)
         self.label_6.setObjectName(u"label_6")
 
         self.horizontalLayout_11.addWidget(self.label_6)
 
-        self.songGroupEdit = QLineEdit(self.layoutWidget2)
+        self.songGroupEdit = QLineEdit(self.songInfoPage)
         self.songGroupEdit.setObjectName(u"songGroupEdit")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -176,16 +184,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.addWidget(self.songGroupEdit)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_11)
+        self.verticalLayout.addLayout(self.horizontalLayout_11)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label = QLabel(self.layoutWidget2)
+        self.label = QLabel(self.songInfoPage)
         self.label.setObjectName(u"label")
 
         self.horizontalLayout_4.addWidget(self.label)
 
-        self.songAnimeEdit = QLineEdit(self.layoutWidget2)
+        self.songAnimeEdit = QLineEdit(self.songInfoPage)
         self.songAnimeEdit.setObjectName(u"songAnimeEdit")
         sizePolicy.setHeightForWidth(self.songAnimeEdit.sizePolicy().hasHeightForWidth())
         self.songAnimeEdit.setSizePolicy(sizePolicy)
@@ -193,16 +201,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.songAnimeEdit)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.label_5 = QLabel(self.layoutWidget2)
+        self.label_5 = QLabel(self.songInfoPage)
         self.label_5.setObjectName(u"label_5")
 
         self.horizontalLayout_7.addWidget(self.label_5)
 
-        self.songOpSpinBox = QSpinBox(self.layoutWidget2)
+        self.songOpSpinBox = QSpinBox(self.songInfoPage)
         self.songOpSpinBox.setObjectName(u"songOpSpinBox")
         sizePolicy.setHeightForWidth(self.songOpSpinBox.sizePolicy().hasHeightForWidth())
         self.songOpSpinBox.setSizePolicy(sizePolicy)
@@ -214,16 +222,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addItem(self.horizontalSpacer_8)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_7)
+        self.verticalLayout.addLayout(self.horizontalLayout_7)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.label_2 = QLabel(self.layoutWidget2)
+        self.label_2 = QLabel(self.songInfoPage)
         self.label_2.setObjectName(u"label_2")
 
         self.horizontalLayout_5.addWidget(self.label_2)
 
-        self.songTitleEdit = QLineEdit(self.layoutWidget2)
+        self.songTitleEdit = QLineEdit(self.songInfoPage)
         self.songTitleEdit.setObjectName(u"songTitleEdit")
         sizePolicy.setHeightForWidth(self.songTitleEdit.sizePolicy().hasHeightForWidth())
         self.songTitleEdit.setSizePolicy(sizePolicy)
@@ -231,16 +239,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.addWidget(self.songTitleEdit)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_5)
+        self.verticalLayout.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.label_3 = QLabel(self.layoutWidget2)
+        self.label_3 = QLabel(self.songInfoPage)
         self.label_3.setObjectName(u"label_3")
 
         self.horizontalLayout_6.addWidget(self.label_3)
 
-        self.songArtistEdit = QLineEdit(self.layoutWidget2)
+        self.songArtistEdit = QLineEdit(self.songInfoPage)
         self.songArtistEdit.setObjectName(u"songArtistEdit")
         sizePolicy.setHeightForWidth(self.songArtistEdit.sizePolicy().hasHeightForWidth())
         self.songArtistEdit.setSizePolicy(sizePolicy)
@@ -248,16 +256,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.songArtistEdit)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_6)
+        self.verticalLayout.addLayout(self.horizontalLayout_6)
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.label_4 = QLabel(self.layoutWidget2)
+        self.label_4 = QLabel(self.songInfoPage)
         self.label_4.setObjectName(u"label_4")
 
         self.horizontalLayout_8.addWidget(self.label_4)
 
-        self.songStartTimeEdit = QLineEdit(self.layoutWidget2)
+        self.songStartTimeEdit = QLineEdit(self.songInfoPage)
         self.songStartTimeEdit.setObjectName(u"songStartTimeEdit")
         sizePolicy.setHeightForWidth(self.songStartTimeEdit.sizePolicy().hasHeightForWidth())
         self.songStartTimeEdit.setSizePolicy(sizePolicy)
@@ -265,16 +273,54 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.addWidget(self.songStartTimeEdit)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_8)
+        self.verticalLayout.addLayout(self.horizontalLayout_8)
+
+
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
+        self.song_group_info_display.addWidget(self.songInfoPage)
+        self.groupInfoPage = QWidget()
+        self.groupInfoPage.setObjectName(u"groupInfoPage")
+        self.verticalLayout_3 = QVBoxLayout(self.groupInfoPage)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.empty_label = QLabel(self.groupInfoPage)
+        self.empty_label.setObjectName(u"empty_label")
+
+        self.verticalLayout_3.addWidget(self.empty_label)
+
+        self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.label_7 = QLabel(self.groupInfoPage)
+        self.label_7.setObjectName(u"label_7")
+
+        self.horizontalLayout_12.addWidget(self.label_7)
+
+        self.group_name_edit = QLineEdit(self.groupInfoPage)
+        self.group_name_edit.setObjectName(u"group_name_edit")
+        sizePolicy.setHeightForWidth(self.group_name_edit.sizePolicy().hasHeightForWidth())
+        self.group_name_edit.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_12.addWidget(self.group_name_edit)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_12)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
+
+        self.song_group_info_display.addWidget(self.groupInfoPage)
+
+        self.song_layout.addWidget(self.song_group_info_display)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_3.addItem(self.verticalSpacer_2)
+        self.song_layout.addItem(self.verticalSpacer_2)
 
         self.roundLabel = QLabel(self.layoutWidget2)
         self.roundLabel.setObjectName(u"roundLabel")
 
-        self.verticalLayout_3.addWidget(self.roundLabel)
+        self.song_layout.addWidget(self.roundLabel)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -310,14 +356,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.addWidget(self.nextRoundButton)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_9)
+        self.song_layout.addLayout(self.horizontalLayout_9)
 
         self.volumeSlider = QSlider(self.layoutWidget2)
         self.volumeSlider.setObjectName(u"volumeSlider")
         self.volumeSlider.setSliderPosition(99)
         self.volumeSlider.setOrientation(Qt.Horizontal)
 
-        self.verticalLayout_3.addWidget(self.volumeSlider)
+        self.song_layout.addWidget(self.volumeSlider)
 
         self.splitter = QSplitter(self.layoutWidget2)
         self.splitter.setObjectName(u"splitter")
@@ -330,7 +376,7 @@ class Ui_MainWindow(object):
         self.trackDurLabel.setObjectName(u"trackDurLabel")
         self.splitter.addWidget(self.trackDurLabel)
 
-        self.verticalLayout_3.addWidget(self.splitter)
+        self.song_layout.addWidget(self.splitter)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -356,6 +402,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
+        self.song_group_info_display.setCurrentIndex(0)
+
+
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
@@ -380,6 +429,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Artist", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.songStartTimeEdit.setText("")
+        self.empty_label.setText("")
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Group", None))
         self.roundLabel.setText(QCoreApplication.translate("MainWindow", u"No Active Game", None))
 #if QT_CONFIG(tooltip)
         self.guessTime.setToolTip(QCoreApplication.translate("MainWindow", u"Guess Time", None))

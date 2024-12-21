@@ -92,6 +92,14 @@ def updateCategory(id, data):
         session.close()
         return category
 
+def updateGroup(oldName: str, newName: str):
+    session = Session()
+    songs = session.query(Song).filter(Song.group == oldName).all()
+    for song in songs:
+        song.group = newName
+        session.commit()
+    session.close()
+
 def createDefaultCategory():
     session = Session()
     cat = Category( name=default,

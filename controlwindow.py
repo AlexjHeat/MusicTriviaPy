@@ -102,9 +102,10 @@ class ControlWindow(QMainWindow):
         item = self.playlistManager.setActiveSong(index)
         if item:
             if index.data(Qt.WhatsThisRole) == 'group':
-                self.ui.songGroupEdit.setText(item)
-                self.ui.fileNameLabel.setText('')
+                self.ui.song_group_info_display.setCurrentWidget(self.ui.groupInfoPage)
+                self.ui.group_name_edit.setText(item)
             elif index.data(Qt.WhatsThisRole) == 'song':
+                self.ui.song_group_info_display.setCurrentWidget(self.ui.songInfoPage)
                 self.ui.fileNameLabel.setText(item.fileName)
                 self.ui.songGroupEdit.setText(item.group)
                 self.ui.songAnimeEdit.setText(item.anime)
@@ -115,21 +116,23 @@ class ControlWindow(QMainWindow):
                     self.ui.songStartTimeEdit.setText(str(item.startTime))
                 else:
                     self.ui.songStartTimeEdit.clear()
-                #Use stack widget, hide accessing item data from this, do it in playlistmanager
-                    #pass back boolean of whetherr its song or group, that's all
 
     def updateActiveSong(self):
-        song = Song()
-        song.group = self.ui.songGroupEdit.text()
-        song.anime = self.ui.songAnimeEdit.text()
-        song.opNum = self.ui.songOpSpinBox.value()
-        song.title = self.ui.songTitleEdit.text()
-        song.artist = self.ui.songArtistEdit.text()
-        if self.ui.songStartTimeEdit.text().isnumeric():
-            song.startTime = int(self.ui.songStartTimeEdit.text())
-        self.playlistManager.updateActiveSong(song)
+        if self.ui.song_group_info_display.currentWidget() == self.ui.groupInfoPage:
+            self.playlistManager.updateActiveGroup(self.ui.group_name_edit.text())
+        elif self.ui.song_group_info_display.currentWidget() == self.ui.songInfoPage:
+            song = Song()
+            song.group = self.ui.songGroupEdit.text()
+            song.anime = self.ui.songAnimeEdit.text()
+            song.opNum = self.ui.songOpSpinBox.value()
+            song.title = self.ui.songTitleEdit.text()
+            song.artist = self.ui.songArtistEdit.text()
+            if self.ui.songStartTimeEdit.text().isnumeric():
+                song.startTime = int(self.ui.songStartTimeEdit.text())
+            self.playlistManager.updateActiveSong(song)
 
         #Clear the song data from UI
+        self.ui.group_name_edit.setText('')
         self.ui.songGroupEdit.setText('')
         self.ui.songAnimeEdit.setText('')
         self.ui.songOpSpinBox.setValue(0)
