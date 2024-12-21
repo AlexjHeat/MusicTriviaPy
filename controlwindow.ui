@@ -106,6 +106,12 @@
      </item>
      <item>
       <widget class="QTreeView" name="songsInTreeView">
+       <property name="dragEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragDrop</enum>
+       </property>
        <property name="uniformRowHeights">
         <bool>false</bool>
        </property>
@@ -113,7 +119,7 @@
         <bool>false</bool>
        </property>
        <property name="headerHidden">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -184,67 +190,17 @@
       </layout>
      </item>
      <item>
-      <widget class="QTreeView" name="songsOutTreeView"/>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="updateSongsBTN">
-         <property name="toolTip">
-          <string>Updates lists to the current contents of the song folder</string>
-         </property>
-         <property name="text">
-          <string>Update Songs</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeSongButton">
-         <property name="text">
-          <string>Remove Song</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <widget class="QTreeView" name="songsOutTreeView">
+       <property name="dragEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragDrop</enum>
+       </property>
+       <property name="headerHidden">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -536,6 +492,7 @@
     <addaction name="separator"/>
     <addaction name="menuNewGame"/>
     <addaction name="menuEndGame"/>
+    <addaction name="scanSongs"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -572,6 +529,11 @@
    </property>
    <property name="text">
     <string>Show Categories</string>
+   </property>
+  </action>
+  <action name="scanSongs">
+   <property name="text">
+    <string>Scan Song Folder</string>
    </property>
   </action>
  </widget>

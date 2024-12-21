@@ -8,7 +8,6 @@
         "db.py",
         "displaywindow.py",
         "displaywindow.ui",
-        "filemanager.py",
         "fontlib.py",
         "viewmodels.py",
         "main.py",

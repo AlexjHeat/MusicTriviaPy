@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.categoryScroll.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1179, 619))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
         self.categoryScroll.setWidget(self.scrollAreaWidgetContents)
 
         self.verticalLayout.addWidget(self.categoryScroll)

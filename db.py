@@ -64,10 +64,33 @@ class Song(Base):
         return str
 
 
+def updateSong(id, data):
+        session = Session()
+        song = session.query(Song).filter(Song.id == id).one()
+        song.group = data.group
+        song.anime = data.anime
+        song.opNum = data.opNum
+        song.title = data.title
+        song.artist = data.artist
+        song.startTime = data.startTime
+        session.commit()
+        session.close()
+        return song
 
-class Directory(Base):
-    __tablename__ = "Directories"
-    dir = Column(String, primary_key=True)
+def updateCategory(id, data):
+        session = Session()
+        category = session.query(Category).filter(Category.id == id).one()
+        category.name = data.name
+        category.description = data.description
+        category.nameColor = data.nameColor
+        category.backgroundColor = data.backgroundColor
+        category.clockColor = data.clockColor
+        category.nameFont = data.nameFont
+        category.clockFont = data.clockFont
+        session.commit()
+        session.expunge(category)
+        session.close()
+        return category
 
 def createDefaultCategory():
     session = Session()

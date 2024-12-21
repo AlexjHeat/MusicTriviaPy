@@ -1,13 +1,11 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtUiTools
-from PySide6.QtCore import QModelIndex, QTimer
-from PySide6.QtWidgets import QMainWindow, QAbstractItemView, QInputDialog, QLineEdit
-from db import Song
+from PySide6.QtCore import Qt, QModelIndex, QTimer
+from PySide6.QtWidgets import QMainWindow, QAbstractItemView, QTreeView, QInputDialog, QLineEdit
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
-from filemanager import FileManager
+from db import Song, Category
 from config import MAX_ROUNDS
-
 
 class ControlWindow(QMainWindow):
     def __init__(self):
@@ -15,7 +13,6 @@ class ControlWindow(QMainWindow):
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
         self.displayWindow = DisplayWindow(self, self.ui.guessTime.value())
         self.playlistManager = PlaylistManager()
-        self.fileManager = FileManager(self)
 
         self.activeSongView = None
         self.activeSongIndex = None
@@ -36,12 +33,11 @@ class ControlWindow(QMainWindow):
         self.ui.categoryEditButton.released.connect(self.editCategory)
         self.ui.categoryRemoveButton.released.connect(self.removeCategory)
 
-        self.ui.songsInTreeView.clicked.connect(self.loadSongIn)
-        self.ui.songsOutTreeView.clicked.connect(self.loadSongOut)
-        self.ui.updateSongsBTN.released.connect(self.updateSongs)
-        #self.ui.removeSongButton.released.connect(self.removeSong)
-        #self.ui.moveSongInButton.released.connect(self.addSongToCategory)
-        #self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
+        self.ui.songsInTreeView.clicked.connect(self.loadSong)
+        self.ui.songsOutTreeView.clicked.connect(self.loadSong)
+        self.ui.scanSongs.triggered.connect(self.scanSongFolder)
+        self.ui.moveSongInButton.released.connect(self.addSongToCategory)
+        self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
 
         self.ui.playButton.released.connect(self.play)
         self.ui.stopButton.released.connect(self.stop)
@@ -54,7 +50,8 @@ class ControlWindow(QMainWindow):
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
         self.ui.menuShowCategories.triggered.connect(self.showCategories)
 
-        self.ui.show()       
+        self.ui.show()
+
 #   ~~~CATEGORIES~~~
     def loadCategoryPlaylist(self, index:QModelIndex):
         #save currently selected song info before loading new category
@@ -68,66 +65,54 @@ class ControlWindow(QMainWindow):
             self.displayWindow.loadCategory(cat)
 
     def createCategory(self):
-        #Opens category dialog
         self.playlistManager.createCategory(self)
 
     def editCategory(self):
-        index = self.ui.categoriesListView.currentIndex()
-        #Opens category dialog
         if self.playlistManager.editActiveCategory(self):
-            self.loadCategoryPlaylist(index)
+            self.loadCategoryPlaylist(self.ui.categoriesListView.currentIndex())
 
     def removeCategory(self):
-        index = self.ui.categoriesListView.currentIndex()
         if self.playlistManager.removeActiveCategory(self):
-            #Will switch to category directly above removed one
-            index = self.ui.categoriesListView.currentIndex()
+            self.ui.categoriesListView.setCurrentIndex(self.ui.categoriesListView.model().index(0,0))
+            self.loadCategoryPlaylist(self.ui.categoriesListView.currentIndex())
             self.loadCategoryPlaylist(index)
 
-    def moveSongInto(self):
+    def addSongToCategory(self):
         pass
 
-    def moveSongOutOf(self):
+    def removeSongFromCategory(self):
         pass
 
 
 #   ~~~SONG LISTVIEWS~~~
-    #Sets the currently selected song in the songIn list view as active, then loads its data
-    def loadSongIn(self):
-        if self.activeSongIndex:
-            self.updateActiveSong()
-        self.ui.songsOutTreeView.clearSelection()
-        self.activeSongView = self.ui.songsInTreeView
-        self.activeSongIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=True)
-        self.loadSongData(song)
+    def loadSong(self, index: QModelIndex):
+        self.updateActiveSong()
+        if index.model() == self.playlistManager.songsInModel:
+            self.ui.songsOutTreeView.clearSelection()
+        elif index.model() == self.playlistManager.songsOutModel:
+            self.ui.songsInTreeView.clearSelection()
 
-    #Sets the currently selected song in the songOut list view as active, then loads its data
-    def loadSongOut(self):
-        if self.activeSongIndex:
-            self.updateActiveSong()
-        self.ui.songsInTreeView.clearSelection()
-        self.activeSongView = self.ui.songsOutTreeView
-        self.activeSongIndex = self.activeSongView.currentIndex()
-        song = self.playlistManager.setActiveSong(self.activeSongIndex, isSongIn=False)
-        self.loadSongData(song)
-
-    def loadSongData(self, song):
-        if song:
-            self.ui.fileNameLabel.setText(song.fileName)
-            self.ui.songGroupEdit.setText(song.group)
-            self.ui.songAnimeEdit.setText(song.anime)
-            self.ui.songOpSpinBox.setValue(song.opNum)
-            self.ui.songTitleEdit.setText(song.title)
-            self.ui.songArtistEdit.setText(song.artist)
-            if song.startTime:
-                self.ui.songStartTimeEdit.setText(str(song.startTime))
-            else:
-                self.ui.songStartTimeEdit.clear()
+        item = self.playlistManager.setActiveSong(index)
+        if item:
+            if index.data(Qt.WhatsThisRole) == 'group':
+                self.ui.songGroupEdit.setText(item)
+                self.ui.fileNameLabel.setText('')
+            elif index.data(Qt.WhatsThisRole) == 'song':
+                self.ui.fileNameLabel.setText(item.fileName)
+                self.ui.songGroupEdit.setText(item.group)
+                self.ui.songAnimeEdit.setText(item.anime)
+                self.ui.songOpSpinBox.setValue(item.opNum)
+                self.ui.songTitleEdit.setText(item.title)
+                self.ui.songArtistEdit.setText(item.artist)
+                if item.startTime:
+                    self.ui.songStartTimeEdit.setText(str(item.startTime))
+                else:
+                    self.ui.songStartTimeEdit.clear()
+                #Use stack widget, hide accessing item data from this, do it in playlistmanager
+                    #pass back boolean of whetherr its song or group, that's all
 
     def updateActiveSong(self):
         song = Song()
-        #Get song data from UI
         song.group = self.ui.songGroupEdit.text()
         song.anime = self.ui.songAnimeEdit.text()
         song.opNum = self.ui.songOpSpinBox.value()
@@ -135,6 +120,7 @@ class ControlWindow(QMainWindow):
         song.artist = self.ui.songArtistEdit.text()
         if self.ui.songStartTimeEdit.text().isnumeric():
             song.startTime = int(self.ui.songStartTimeEdit.text())
+        print(song)
         self.playlistManager.updateActiveSong(song)
 
         #Clear the song data from UI
@@ -147,7 +133,7 @@ class ControlWindow(QMainWindow):
         self.activeSongIndex = None
 
 #   ~~~SONGS~~~
-    def updateSongs(self):
+    def scanSongFolder(self):
         self.playlistManager.scanSongFolder()
         self.loadCategoryPlaylist(self.ui.categoriesListView.currentIndex())
     '''

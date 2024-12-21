@@ -16,12 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QListView, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSizePolicy, QSlider,
-    QSpacerItem, QSpinBox, QSplitter, QStatusBar,
-    QTextEdit, QToolButton, QTreeView, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QListView, QMainWindow,
+    QMenu, QMenuBar, QPushButton, QSizePolicy,
+    QSlider, QSpacerItem, QSpinBox, QSplitter,
+    QStatusBar, QTextEdit, QToolButton, QTreeView,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -38,6 +38,8 @@ class Ui_MainWindow(object):
         self.menuShowCategories = QAction(MainWindow)
         self.menuShowCategories.setObjectName(u"menuShowCategories")
         self.menuShowCategories.setCheckable(True)
+        self.scanSongs = QAction(MainWindow)
+        self.scanSongs.setObjectName(u"scanSongs")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -98,9 +100,11 @@ class Ui_MainWindow(object):
 
         self.songsInTreeView = QTreeView(self.layoutWidget1)
         self.songsInTreeView.setObjectName(u"songsInTreeView")
+        self.songsInTreeView.setDragEnabled(False)
+        self.songsInTreeView.setDragDropMode(QAbstractItemView.DragDrop)
         self.songsInTreeView.setUniformRowHeights(False)
         self.songsInTreeView.setSortingEnabled(False)
-        self.songsInTreeView.setHeaderHidden(False)
+        self.songsInTreeView.setHeaderHidden(True)
 
         self.verticalLayout_2.addWidget(self.songsInTreeView)
 
@@ -136,35 +140,11 @@ class Ui_MainWindow(object):
 
         self.songsOutTreeView = QTreeView(self.layoutWidget1)
         self.songsOutTreeView.setObjectName(u"songsOutTreeView")
+        self.songsOutTreeView.setDragEnabled(True)
+        self.songsOutTreeView.setDragDropMode(QAbstractItemView.DragDrop)
+        self.songsOutTreeView.setHeaderHidden(True)
 
         self.verticalLayout_2.addWidget(self.songsOutTreeView)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
-
-        self.updateSongsBTN = QPushButton(self.layoutWidget1)
-        self.updateSongsBTN.setObjectName(u"updateSongsBTN")
-
-        self.horizontalLayout_3.addWidget(self.updateSongsBTN)
-
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_7)
-
-        self.removeSongButton = QPushButton(self.layoutWidget1)
-        self.removeSongButton.setObjectName(u"removeSongButton")
-
-        self.horizontalLayout_3.addWidget(self.removeSongButton)
-
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_9)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
@@ -369,6 +349,7 @@ class Ui_MainWindow(object):
         self.menuCategory.addSeparator()
         self.menuCategory.addAction(self.menuNewGame)
         self.menuCategory.addAction(self.menuEndGame)
+        self.menuCategory.addAction(self.scanSongs)
         self.menuView.addAction(self.menuFullscreen)
         self.menuView.addAction(self.menuShowCategories)
 
@@ -383,17 +364,13 @@ class Ui_MainWindow(object):
         self.menuEndGame.setText(QCoreApplication.translate("MainWindow", u"End Game", None))
         self.menuFullscreen.setText(QCoreApplication.translate("MainWindow", u"Fullscreen", None))
         self.menuShowCategories.setText(QCoreApplication.translate("MainWindow", u"Show Categories", None))
+        self.scanSongs.setText(QCoreApplication.translate("MainWindow", u"Scan Song Folder", None))
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.currentCategoryLabel.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
         self.moveSongInButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
-#if QT_CONFIG(tooltip)
-        self.updateSongsBTN.setToolTip(QCoreApplication.translate("MainWindow", u"Updates lists to the current contents of the song folder", None))
-#endif // QT_CONFIG(tooltip)
-        self.updateSongsBTN.setText(QCoreApplication.translate("MainWindow", u"Update Songs", None))
-        self.removeSongButton.setText(QCoreApplication.translate("MainWindow", u"Remove Song", None))
         self.fileNameLabel.setText("")
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Group", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))

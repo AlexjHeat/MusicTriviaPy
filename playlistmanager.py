@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QModelIndex, QFileInfo
 from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category
+from db import Session, Song, Category, updateSong, updateCategory
 from viewmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
 from config import DEFAULT_CATEGORY, SONG_PATH
@@ -22,70 +22,33 @@ class PlaylistManager:
         self.songsInModel = SongTreeModel()
         self.songsOutModel = SongTreeModel()
 
-        self.activeCategory = None
-        self.activeCategoryIndex = None
-        self.activeSong = None
-        self.activeSongIndex = None
-        self.activeSongModel = None
+        self.activeCategoryIndex = QModelIndex()
+        self.activeSongIndex = QModelIndex()
 
 
-    def setActiveCategory(self, index:QModelIndex):
-        if not index.isValid():
-           self.activeCategoryIndex = None
-           self.activeCategory = None
+#   ~~~CATEGORIES~~~
+    def setActiveCategory(self, index: QModelIndex):
+        if index.isValid() is False:
+           self.activeCategoryIndex = QModelIndex()
            return None
         self.activeCategoryIndex = index
-        self.activeCategory = self.categoriesModel.data(index, Qt.ItemDataRole)
-
-        #load songs belonging to the active category to model
-        session = Session()
-        songs = session.query(Song).filter(Song.categories.any(Category.name == self.activeCategory.name), Song.missingFile == False).all()
-        self.songsInModel.loadData(songs)
-
-        #load songs NOT belonging to the active category to model
-        songs = session.query(Song).filter(~Song.categories.any(Category.id == self.activeCategory.id), Song.missingFile == False).all()
-        self.songsOutModel.loadData(songs)
-
-        #no active song now
-        self.activeSong = None
         self.activeSongIndex = None
-        self.activeSongModel = None
 
-        return self.activeCategory
+        cat = index.data(role=Qt.EditRole)
+
+        session = Session()
+        songs = session.query(Song).filter(Song.categories.any(Category.name == cat.name), Song.missingFile == False).all()
+        self.songsInModel.loadData(songs)
+        songs = session.query(Song).filter(~Song.categories.any(Category.name == cat.name), Song.missingFile == False).all()
+        self.songsOutModel.loadData(songs)
+        return cat
 
     def getActiveCategory(self):
-        return self.activeCategory
+        return self.activeCategoryIndex.data()
 
     def getCategories(self):
         session = Session()
         return session.query(Category).filter(Category.name != DEFAULT_CATEGORY).all()
-
-    def scanSongFolder(self):
-        song_files = [f for f in os.listdir(SONG_PATH) if os.path.isfile(f'{SONG_PATH}/{f}')]
-        session = Session()
-        song_db = session.query(Song).all()
-        default_cat = session.query(Category).filter(Category.name == DEFAULT_CATEGORY).one()
-
-        for song in song_db:
-            song.missingFile = True
-
-        for file in song_files:
-            found = False
-            for song in song_db:
-                if file == song.fileName:
-                    song.missingFile = False
-                    found = True
-                    break
-            if not found:
-                song = Song(fileName=file)
-                if default_cat:
-                    song.categories.append(default_cat)
-
-                session.add(song)
-
-
-        session.commit()
-        session.close()
 
     def createCategory(self, parent):
         dialog = CategoryDialog(parent)
@@ -112,32 +75,22 @@ class PlaylistManager:
 
         #Edit active category
         dialog = CategoryDialog(parent)
-        dialog.loadInfo(self.activeCategory)
+        category = self.activeCategoryIndex.data(Qt.EditRole)
+        dialog.loadInfo(self.activeCategoryIndex.data())
         if dialog.exec() == QDialog.Accepted:
             data = dialog.getCategory()
-            session = Session()
             try:
-                cat = session.query(Category).filter(Category.name == self.activeCategory.name).one()
-                cat.name = data.name
-                cat.description = data.description
-                cat.nameColor  = data.nameColor
-                cat.backgroundColor = data.backgroundColor
-                cat.clockColor = data.clockColor
-                cat.nameFont = data.nameFont
-                cat.clockFont = data.clockFont
-                session.commit()
+                updateCategory(category.id, data)
             except sqlalchemy.exc.IntegrityError:
                 QMessageBox.critical(parent, 'Error', "Category name already exists!")
             else:
-                session.expunge(cat)
-                self.activeCategory = cat
                 if self.categoriesModel.setData(self.activeCategoryIndex, cat):
                     return True
         return False
 
     def removeActiveCategory(self, parent):
         #Make sure default category is not being edited
-        if self.activeCategory.name == DEFAULT_CATEGORY:
+        if self.activeCategoryIndex.data().name == DEFAULT_CATEGORY:
             QMessageBox.warning(parent, 'Warning', "Cannot remove default category!")
             return False
 
@@ -149,73 +102,64 @@ class PlaylistManager:
                         QMessageBox.Ok | QMessageBox.Cancel)
         if warning_msg == QMessageBox.Ok:
             session = Session()
-            cat = session.query(Category).filter(Category.id == self.activeCategory.id).one()
+            cat = session.query(Category).filter(Category.id == self.activeCategoryIndex.data().id).one()
             session.delete(cat)
             session.commit()
             self.categoriesModel.removeData(self.activeCategoryIndex)
             return True
         return False
 
-    def setActiveSong(self, index:QModelIndex, isSongIn:bool):
+#   ~~~SONGS~~~
+    def scanSongFolder(self):
+        song_files = [f for f in os.listdir(SONG_PATH) if os.path.isfile(f'{SONG_PATH}/{f}')]
+        session = Session()
+        song_db = session.query(Song).all()
+        default_cat = session.query(Category).filter(Category.name == DEFAULT_CATEGORY).one()
+
+        for song in song_db:
+            song.missingFile = True
+
+        for file in song_files:
+            found = False
+            for song in song_db:
+                if file == song.fileName:
+                    song.missingFile = False
+                    found = True
+                    break
+            if not found:
+                song = Song(fileName=file)
+                if default_cat:
+                    song.categories.append(default_cat)
+
+                session.add(song)
+        session.commit()
+        session.close()
+
+    def setActiveSong(self, index:QModelIndex):
         if not index.isValid():
             return None
-        if isSongIn:
-            self.activeSongModel = self.songsInModel
-        else:
-            self.activeSongModel = self.songsOutModel
-        self.activeSong = self.activeSongModel.data(index, Qt.ItemDataRole)
         self.activeSongIndex = index
-        return self.activeSong
+        return index.data(Qt.EditRole)
+
 
     def updateActiveSong(self, data:Song):
-        #Update song in database
-        if self.activeSong == None:
-            return False
+        if self.activeSongIndex is None or self.activeSongIndex.isValid() is False:
+            return
 
-        session = Session()
-        song = session.query(Song).filter(Song.id == self.activeSong.id).one()
-        if song.group != data.group:
-            pass    #
+        if self.activeSongIndex.data(Qt.WhatsThisRole) == 'group':
+            #Call model to update group node's name for all its children
+            #Update all children in database
+            return
 
-        song.group = data.group
-        song.anime = data.anime
-        song.opNum = data.opNum
-        song.title = data.title
-        song.artist = data.artist
-        song.startTime = data.startTime
-        session.commit()
-
-
-        #update song in model
-        session.expunge(song)
-        self.activeSongModel.setData(self.activeSongIndex, song)
-        self.activeSong = song
-        return True
+        elif self.activeSongIndex.data(Qt.WhatsThisRole) == 'song':
+            activeSong = self.activeSongIndex.data(Qt.EditRole)
+            if activeSong is None:
+                return
+            self.activeSongIndex.model().setSongData(self.activeSongIndex, data)    #updates model
+            updateSong(activeSong.id, data)                                         #updates database
+            return
 
     '''
-    def removeActiveSong(self, parent):
-        #Make user confirm to prevent accidental loss of data
-        warning_msg = QMessageBox.warning(
-                        parent,
-                        "Warning",
-                        f"Do you really want to remove the song: {str(self.activeSong)}",
-                        QMessageBox.Ok | QMessageBox.Cancel)
-        if warning_msg == QMessageBox.Ok:
-            session = Session()
-            #remove from database
-            song = session.query(Song).filter(Song.id == self.activeSong.id).one()
-            session.delete(song)
-            session.commit()
-            session.expunge(song)
-
-            #remove from model
-            self.activeSongModel.removeData(self.activeSongIndex)
-            self.activeSong = None
-            self.activeSongIndex = None
-            self.activeSongModel = None
-            return True
-        return False
-
     #This action resets the active song
     def addActiveSongToActiveCategory(self):
         #Get active category and song from database, add song to category
