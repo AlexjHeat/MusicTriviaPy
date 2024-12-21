@@ -102,9 +102,12 @@ class ControlWindow(QMainWindow):
         item = self.playlistManager.setActiveSong(index)
         if item:
             if index.data(Qt.WhatsThisRole) == 'group':
+                #stacked widget page 1
                 self.ui.songGroupEdit.setText(item)
                 self.ui.fileNameLabel.setText('')
+                
             elif index.data(Qt.WhatsThisRole) == 'song':
+                #stacked widget page 2
                 self.ui.fileNameLabel.setText(item.fileName)
                 self.ui.songGroupEdit.setText(item.group)
                 self.ui.songAnimeEdit.setText(item.anime)
@@ -115,8 +118,6 @@ class ControlWindow(QMainWindow):
                     self.ui.songStartTimeEdit.setText(str(item.startTime))
                 else:
                     self.ui.songStartTimeEdit.clear()
-                #Use stack widget, hide accessing item data from this, do it in playlistmanager
-                    #pass back boolean of whetherr its song or group, that's all
 
     def updateActiveSong(self):
         song = Song()

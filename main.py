@@ -9,7 +9,7 @@ import viewmodels
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #createTables()
-    #fontlib.loadFonts()
+    fontlib.loadFonts()
     controlWindow = ControlWindow()
 
     sys.exit(app.exec())

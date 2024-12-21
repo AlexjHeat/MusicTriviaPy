@@ -116,7 +116,7 @@
         <bool>false</bool>
        </property>
        <property name="sortingEnabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="headerHidden">
         <bool>true</bool>
@@ -196,6 +196,9 @@
        </property>
        <property name="dragDropMode">
         <enum>QAbstractItemView::DragDrop</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
        </property>
        <property name="headerHidden">
         <bool>true</bool>

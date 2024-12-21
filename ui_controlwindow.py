@@ -103,7 +103,7 @@ class Ui_MainWindow(object):
         self.songsInTreeView.setDragEnabled(False)
         self.songsInTreeView.setDragDropMode(QAbstractItemView.DragDrop)
         self.songsInTreeView.setUniformRowHeights(False)
-        self.songsInTreeView.setSortingEnabled(False)
+        self.songsInTreeView.setSortingEnabled(True)
         self.songsInTreeView.setHeaderHidden(True)
 
         self.verticalLayout_2.addWidget(self.songsInTreeView)
@@ -142,6 +142,7 @@ class Ui_MainWindow(object):
         self.songsOutTreeView.setObjectName(u"songsOutTreeView")
         self.songsOutTreeView.setDragEnabled(True)
         self.songsOutTreeView.setDragDropMode(QAbstractItemView.DragDrop)
+        self.songsOutTreeView.setSortingEnabled(True)
         self.songsOutTreeView.setHeaderHidden(True)
 
         self.verticalLayout_2.addWidget(self.songsOutTreeView)

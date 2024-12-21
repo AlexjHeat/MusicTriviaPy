@@ -11,11 +11,9 @@ from db import Category
 import fontlib
 import time, random
 from config import MIN_POST_GUESS_TIME, DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR
-MIN_POST_GUESS_TIME = 15
 
 
 class DisplayWindow:
-
     def __init__(self, parent, countdownTime):
         super().__init__()
         self.parent = parent
