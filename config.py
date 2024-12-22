@@ -3,7 +3,6 @@
 DEFAULT_CATEGORY = "Default"
 
 MIN_POST_GUESS_TIME = 15
-MAX_ROUNDS = 10
 TRANSITION_TIME = 2     #used for transition gif
 
 DEFAULT_ROUND_FONT = 'Yoruka'
@@ -17,3 +16,10 @@ DEFAULT_BACKGROUND_COLOR = '#FFFDD0'
 
 FONT_PATH = ".//fonts"
 SONG_PATH = ".//songs"
+RESET_ICON_PATH = ".//images//icons/reset.png"
+
+
+#VOLUME
+SOFT_START_SPEED = 500     #how long it takes to get to full volume (in ms)
+QUIET_MODE_SPEED = 2500
+QUIET_MODE_FACTOR = 2.0

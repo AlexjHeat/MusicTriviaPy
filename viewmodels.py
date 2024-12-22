@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore import Qt, QAbstractItemModel, QAbstractListModel, QModelIndex
-from PySide6.QtGui import QStandardItemModel, QPixmap, QIcon
+from PySide6.QtGui import QPixmap, QIcon
 from db import Song, Category
 
 

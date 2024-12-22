@@ -16,11 +16,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QListView, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QSizePolicy,
-    QSlider, QSpacerItem, QSpinBox, QSplitter,
-    QStackedWidget, QStatusBar, QTextEdit, QToolButton,
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QHBoxLayout,
+    QHeaderView, QLabel, QLineEdit, QListView,
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QSlider, QSpacerItem, QSpinBox,
+    QSplitter, QStackedWidget, QStatusBar, QToolButton,
     QTreeView, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
@@ -38,13 +38,18 @@ class Ui_MainWindow(object):
         self.menuShowCategories = QAction(MainWindow)
         self.menuShowCategories.setObjectName(u"menuShowCategories")
         self.menuShowCategories.setCheckable(True)
-        self.scanSongs = QAction(MainWindow)
-        self.scanSongs.setObjectName(u"scanSongs")
+        self.scan_songs = QAction(MainWindow)
+        self.scan_songs.setObjectName(u"scan_songs")
+        self.media_player_mode = QAction(MainWindow)
+        self.media_player_mode.setObjectName(u"media_player_mode")
+        self.media_player_mode.setCheckable(True)
+        self.remove_missing_songs = QAction(MainWindow)
+        self.remove_missing_songs.setObjectName(u"remove_missing_songs")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(30, 60, 253, 448))
+        self.layoutWidget.setGeometry(QRect(30, 60, 253, 371))
         self.category_layout = QVBoxLayout(self.layoutWidget)
         self.category_layout.setObjectName(u"category_layout")
         self.category_layout.setContentsMargins(0, 0, 0, 0)
@@ -53,11 +58,14 @@ class Ui_MainWindow(object):
 
         self.category_layout.addWidget(self.categoriesListView)
 
-        self.categoryDescriptionEdit = QTextEdit(self.layoutWidget)
-        self.categoryDescriptionEdit.setObjectName(u"categoryDescriptionEdit")
-        self.categoryDescriptionEdit.setReadOnly(True)
+        self.category_description_label = QLabel(self.layoutWidget)
+        self.category_description_label.setObjectName(u"category_description_label")
 
-        self.category_layout.addWidget(self.categoryDescriptionEdit)
+        self.category_layout.addWidget(self.category_description_label)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.category_layout.addItem(self.verticalSpacer_4)
 
         self.category_button_layout = QHBoxLayout()
         self.category_button_layout.setObjectName(u"category_button_layout")
@@ -93,10 +101,10 @@ class Ui_MainWindow(object):
         self.treeview_layout = QVBoxLayout(self.layoutWidget1)
         self.treeview_layout.setObjectName(u"treeview_layout")
         self.treeview_layout.setContentsMargins(0, 0, 0, 0)
-        self.currentCategoryLabel = QLabel(self.layoutWidget1)
-        self.currentCategoryLabel.setObjectName(u"currentCategoryLabel")
+        self.current_category_label = QLabel(self.layoutWidget1)
+        self.current_category_label.setObjectName(u"current_category_label")
 
-        self.treeview_layout.addWidget(self.currentCategoryLabel)
+        self.treeview_layout.addWidget(self.current_category_label)
 
         self.songsInTreeView = QTreeView(self.layoutWidget1)
         self.songsInTreeView.setObjectName(u"songsInTreeView")
@@ -149,7 +157,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 368))
+        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 421))
         self.song_layout = QVBoxLayout(self.layoutWidget2)
         self.song_layout.setObjectName(u"song_layout")
         self.song_layout.setContentsMargins(0, 0, 0, 0)
@@ -317,20 +325,46 @@ class Ui_MainWindow(object):
 
         self.song_layout.addItem(self.verticalSpacer_2)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.prevRoundButton = QToolButton(self.layoutWidget2)
+        self.prevRoundButton.setObjectName(u"prevRoundButton")
+        self.prevRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.prevRoundButton.setArrowType(Qt.LeftArrow)
+
+        self.horizontalLayout.addWidget(self.prevRoundButton)
+
+        self.round_reset_button = QToolButton(self.layoutWidget2)
+        self.round_reset_button.setObjectName(u"round_reset_button")
+
+        self.horizontalLayout.addWidget(self.round_reset_button)
+
+        self.nextRoundButton = QToolButton(self.layoutWidget2)
+        self.nextRoundButton.setObjectName(u"nextRoundButton")
+        self.nextRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.nextRoundButton.setArrowType(Qt.RightArrow)
+
+        self.horizontalLayout.addWidget(self.nextRoundButton)
+
         self.roundLabel = QLabel(self.layoutWidget2)
         self.roundLabel.setObjectName(u"roundLabel")
 
-        self.song_layout.addWidget(self.roundLabel)
+        self.horizontalLayout.addWidget(self.roundLabel)
+
+
+        self.song_layout.addLayout(self.horizontalLayout)
+
+        self.autoIncrementRounds_checkbox = QCheckBox(self.layoutWidget2)
+        self.autoIncrementRounds_checkbox.setObjectName(u"autoIncrementRounds_checkbox")
+
+        self.song_layout.addWidget(self.autoIncrementRounds_checkbox)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.song_layout.addItem(self.verticalSpacer_3)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.guessTime = QSpinBox(self.layoutWidget2)
-        self.guessTime.setObjectName(u"guessTime")
-        self.guessTime.setMinimum(5)
-        self.guessTime.setValue(30)
-
-        self.horizontalLayout_9.addWidget(self.guessTime)
-
         self.playButton = QPushButton(self.layoutWidget2)
         self.playButton.setObjectName(u"playButton")
 
@@ -341,19 +375,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9.addWidget(self.stopButton)
 
-        self.prevRoundButton = QToolButton(self.layoutWidget2)
-        self.prevRoundButton.setObjectName(u"prevRoundButton")
-        self.prevRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        self.prevRoundButton.setArrowType(Qt.LeftArrow)
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_9.addWidget(self.prevRoundButton)
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
 
-        self.nextRoundButton = QToolButton(self.layoutWidget2)
-        self.nextRoundButton.setObjectName(u"nextRoundButton")
-        self.nextRoundButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        self.nextRoundButton.setArrowType(Qt.RightArrow)
+        self.guessTime = QSpinBox(self.layoutWidget2)
+        self.guessTime.setObjectName(u"guessTime")
+        self.guessTime.setMinimum(5)
+        self.guessTime.setValue(30)
 
-        self.horizontalLayout_9.addWidget(self.nextRoundButton)
+        self.horizontalLayout_9.addWidget(self.guessTime)
 
 
         self.song_layout.addLayout(self.horizontalLayout_9)
@@ -368,13 +399,9 @@ class Ui_MainWindow(object):
         self.splitter = QSplitter(self.layoutWidget2)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Horizontal)
-        self.currentPosLabel = QLabel(self.splitter)
-        self.currentPosLabel.setObjectName(u"currentPosLabel")
-        self.currentPosLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.splitter.addWidget(self.currentPosLabel)
-        self.trackDurLabel = QLabel(self.splitter)
-        self.trackDurLabel.setObjectName(u"trackDurLabel")
-        self.splitter.addWidget(self.trackDurLabel)
+        self.current_position_label = QLabel(self.splitter)
+        self.current_position_label.setObjectName(u"current_position_label")
+        self.splitter.addWidget(self.current_position_label)
 
         self.song_layout.addWidget(self.splitter)
 
@@ -394,9 +421,9 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuCategory.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
         self.menuCategory.addSeparator()
-        self.menuCategory.addAction(self.menuNewGame)
-        self.menuCategory.addAction(self.menuEndGame)
-        self.menuCategory.addAction(self.scanSongs)
+        self.menuCategory.addAction(self.media_player_mode)
+        self.menuCategory.addAction(self.scan_songs)
+        self.menuCategory.addAction(self.remove_missing_songs)
         self.menuView.addAction(self.menuFullscreen)
         self.menuView.addAction(self.menuShowCategories)
 
@@ -414,11 +441,14 @@ class Ui_MainWindow(object):
         self.menuEndGame.setText(QCoreApplication.translate("MainWindow", u"End Game", None))
         self.menuFullscreen.setText(QCoreApplication.translate("MainWindow", u"Fullscreen", None))
         self.menuShowCategories.setText(QCoreApplication.translate("MainWindow", u"Show Categories", None))
-        self.scanSongs.setText(QCoreApplication.translate("MainWindow", u"Scan Song Folder", None))
+        self.scan_songs.setText(QCoreApplication.translate("MainWindow", u"Scan Song Folder", None))
+        self.media_player_mode.setText(QCoreApplication.translate("MainWindow", u"Media Player Mode", None))
+        self.remove_missing_songs.setText(QCoreApplication.translate("MainWindow", u"Remove Missing Songs", None))
+        self.category_description_label.setText("")
         self.categoryCreateButton.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.categoryEditButton.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.categoryRemoveButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
-        self.currentCategoryLabel.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
+        self.current_category_label.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
         self.moveSongInButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.fileNameLabel.setText("")
@@ -431,16 +461,17 @@ class Ui_MainWindow(object):
         self.songStartTimeEdit.setText("")
         self.empty_label.setText("")
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Group", None))
-        self.roundLabel.setText(QCoreApplication.translate("MainWindow", u"No Active Game", None))
+        self.prevRoundButton.setText("")
+        self.round_reset_button.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.nextRoundButton.setText("")
+        self.roundLabel.setText(QCoreApplication.translate("MainWindow", u"Round 0", None))
+        self.autoIncrementRounds_checkbox.setText(QCoreApplication.translate("MainWindow", u"Auto-Increment rounds", None))
+        self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
+        self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
 #if QT_CONFIG(tooltip)
         self.guessTime.setToolTip(QCoreApplication.translate("MainWindow", u"Guess Time", None))
 #endif // QT_CONFIG(tooltip)
-        self.playButton.setText(QCoreApplication.translate("MainWindow", u"Play", None))
-        self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
-        self.prevRoundButton.setText("")
-        self.nextRoundButton.setText("")
-        self.currentPosLabel.setText("")
-        self.trackDurLabel.setText("")
+        self.current_position_label.setText("")
         self.menuCategory.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
     # retranslateUi

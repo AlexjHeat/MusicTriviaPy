@@ -13,6 +13,7 @@
         "main.py",
         "musictrivia.db",
         "playlistmanager.py",
-        "volumemanager.py"
+        "volumemanager.py",
+        "mediaplayer.py"
     ]
 }

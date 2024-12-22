@@ -127,7 +127,8 @@ class ControlWindow(QMainWindow):
     def mediaPlayerMode(self):
         self.displayWindow.setMediaPlayerMode(self.ui.media_player_mode.isChecked())
 
-    def play(self):
+    def play(self, song: Song = None):
+
         song = self.playlistManager.getActiveSong()
         if song:
             self.displayWindow.play(song)
@@ -154,7 +155,11 @@ class ControlWindow(QMainWindow):
             self.stop()
         currentPosition = f'{int(currentPos/60)}:{int((currentPos%60)/10)}{(currentPos%60)%10}'
         trackDuration = f'{int(trackLength/60)}:{int((trackLength%60)/10)}{(trackLength%60)%10}'
+
         self.ui.current_position_label.setText(f'{currentPosition} / {trackDuration}')
+        if self.displayWindow.mediaPlayer.mediaStatus() == QMediaPlayer.EndOfMedia:
+            if self.ui.autoIncrementRounds_checkbox.isChecked():
+                self.songInTreeView.model().getRandomSong()
 
 #   ~~~ROUNDS~~~
     def resetRound(self):

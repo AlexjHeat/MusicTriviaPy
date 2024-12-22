@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QTextEdit, QComboBox, QFontComboBox, QDialogButtonBox, QToolButton, QFileDialog, QColorDialog
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QTextEdit, QFontComboBox, QDialogButtonBox, QToolButton, QColorDialog
 from PySide6.QtGui import QColor
 from functools import partial
 from db import Category

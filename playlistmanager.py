@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtCore import Qt, QModelIndex, QFileInfo
-from PySide6.QtWidgets import QDialog, QMessageBox, QFileDialog
+from PySide6.QtCore import Qt, QModelIndex
+from PySide6.QtWidgets import QDialog, QMessageBox
 import sqlalchemy
 from enum import Enum
 from db import Session, Song, Category, updateSong, updateCategory, updateGroup
@@ -48,7 +48,8 @@ class PlaylistManager:
 
     def getCategories(self):
         session = Session()
-        return session.query(Category).filter(Category.name != DEFAULT_CATEGORY).all()
+        categories = session.query(Category).filter(Category.name != DEFAULT_CATEGORY).all()
+        return categories
 
     def createCategory(self, parent):
         dialog = CategoryDialog(parent)
@@ -80,17 +81,18 @@ class PlaylistManager:
         if dialog.exec() == QDialog.Accepted:
             data = dialog.getCategory()
             try:
-                updateCategory(category.id, data)
+                category = updateCategory(category.id, data)
+
             except sqlalchemy.exc.IntegrityError:
                 QMessageBox.critical(parent, 'Error', "Category name already exists!")
             else:
-                if self.categoriesModel.setData(self.activeCategoryIndex, data):
+                if self.categoriesModel.setData(self.activeCategoryIndex, category):
                     return True
         return False
 
     def removeActiveCategory(self, parent):
         #Make sure default category is not being edited
-        if self.activeCategoryIndex.data().name == DEFAULT_CATEGORY:
+        if self.activeCategoryIndex.data() == DEFAULT_CATEGORY:
             QMessageBox.warning(parent, 'Warning', "Cannot remove default category!")
             return False
 
@@ -98,11 +100,11 @@ class PlaylistManager:
         warning_msg = QMessageBox.warning(
                         parent,
                         "Warning",
-                        f"Do you really want to remove the category: {self.activeCategory.name}",
+                        f"Do you really want to remove the category: {self.activeCategoryIndex.data()}",
                         QMessageBox.Ok | QMessageBox.Cancel)
         if warning_msg == QMessageBox.Ok:
             session = Session()
-            cat = session.query(Category).filter(Category.id == self.activeCategoryIndex.data().id).one()
+            cat = session.query(Category).filter(Category.id == self.activeCategoryIndex.data(Qt.EditRole).id).one()
             session.delete(cat)
             session.commit()
             self.categoriesModel.removeData(self.activeCategoryIndex)
@@ -135,7 +137,12 @@ class PlaylistManager:
         session.commit()
         session.close()
 
-    def setActiveSong(self, index:QModelIndex):
+    def getActiveSong(self):
+        if not self.activeSongIndex.isValid() and self.activeSongIndex.data(Qt.WhatsThisRole) != 'song':
+            return None
+        return self.activeSongIndex.data(Qt.EditRole)
+
+    def setActiveIndex(self, index:QModelIndex):
         if not index.isValid():
             return None
         self.activeSongIndex = index

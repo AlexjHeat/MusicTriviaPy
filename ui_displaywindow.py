@@ -79,9 +79,10 @@ class Ui_MainWindow(object):
         self.categoryScroll = QScrollArea(self.categoriesPage)
         self.categoryScroll.setObjectName(u"categoryScroll")
         self.categoryScroll.setWidgetResizable(True)
+        self.categoryScroll.setAlignment(Qt.AlignHCenter|Qt.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1179, 619))
         self.categoryScroll.setWidget(self.scrollAreaWidgetContents)
 
         self.verticalLayout.addWidget(self.categoryScroll)
@@ -95,7 +96,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.mainDisplay.setCurrentIndex(0)
+        self.mainDisplay.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
