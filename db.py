@@ -100,6 +100,12 @@ def updateGroup(oldName: str, newName: str):
         session.commit()
     session.close()
 
+def getCategorySongs(id: int):
+    session = Session()
+    songs = session.query(Song).filter(Song.categories.any(Category.id == id), Song.missingFile == False).all()
+    session.close()
+    return songs
+
 def createDefaultCategory():
     session = Session()
     cat = Category( name=default,

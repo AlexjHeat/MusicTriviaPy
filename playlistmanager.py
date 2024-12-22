@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QModelIndex
 from PySide6.QtWidgets import QDialog, QMessageBox
 import sqlalchemy
 from enum import Enum
-from db import Session, Song, Category, updateSong, updateCategory, updateGroup
+from db import Session, Song, Category, updateSong, updateCategory, updateGroup, getCategorySongs
 from viewmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
 from config import DEFAULT_CATEGORY, SONG_PATH
@@ -29,11 +29,10 @@ class PlaylistManager:
 #   ~~~CATEGORIES~~~
     def setActiveCategory(self, index: QModelIndex):
         if index.isValid() is False:
-           self.activeCategoryIndex = QModelIndex()
+           #self.activeCategoryIndex = QModelIndex()
            return None
         self.activeCategoryIndex = index
         self.activeSongIndex = None
-
         cat = index.data(role=Qt.EditRole)
 
         session = Session()
@@ -45,6 +44,12 @@ class PlaylistManager:
 
     def getActiveCategory(self):
         return self.activeCategoryIndex.data()
+
+    def getActiveCategorySongs(self) -> [Song]:
+        if self.activeCategoryIndex.isValid() is False:
+           return []
+        cat = self.activeCategoryIndex.data(role=Qt.EditRole)
+        return getCategorySongs(cat.id)
 
     def getCategories(self):
         session = Session()
@@ -138,9 +143,9 @@ class PlaylistManager:
         session.close()
 
     def getActiveSong(self):
-        if not self.activeSongIndex.isValid() and self.activeSongIndex.data(Qt.WhatsThisRole) != 'song':
-            return None
-        return self.activeSongIndex.data(Qt.EditRole)
+        if self.activeSongIndex and self.activeSongIndex.isValid() and self.activeSongIndex.data(Qt.WhatsThisRole) == 'song':
+            return self.activeSongIndex.data(Qt.EditRole)
+        return None
 
     def setActiveIndex(self, index:QModelIndex):
         if not index.isValid():

@@ -597,24 +597,25 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuCategory">
+   <widget class="QMenu" name="menuSongFiles">
     <property name="title">
-     <string>Options</string>
+     <string>Song Files</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="media_player_mode"/>
     <addaction name="scan_songs"/>
     <addaction name="remove_missing_songs"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="menuOptions">
     <property name="title">
-     <string>View</string>
+     <string>Options</string>
     </property>
     <addaction name="menuFullscreen"/>
     <addaction name="menuShowCategories"/>
+    <addaction name="continuous_mode"/>
+    <addaction name="always_show_video"/>
    </widget>
-   <addaction name="menuCategory"/>
-   <addaction name="menuView"/>
+   <addaction name="menuSongFiles"/>
+   <addaction name="menuOptions"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="menuNewGame">
@@ -653,12 +654,28 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Media Player Mode</string>
+    <string>Continuous Mode</string>
    </property>
   </action>
   <action name="remove_missing_songs">
    <property name="text">
     <string>Remove Missing Songs</string>
+   </property>
+  </action>
+  <action name="continuous_mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Continuous Mode</string>
+   </property>
+  </action>
+  <action name="always_show_video">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always Show Video</string>
    </property>
   </action>
  </widget>

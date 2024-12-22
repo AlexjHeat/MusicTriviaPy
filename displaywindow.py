@@ -1,20 +1,17 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtUiTools
-from PySide6.QtCore import QUrl, Qt
-from PySide6.QtWidgets import QWidget, QSizePolicy, QVBoxLayout, QLabel
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PySide6.QtMultimediaWidgets import QVideoWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PySide6.QtGui import QMovie, QColor
+from mediaplayer import MediaPlayer
 from countdown import Countdown
-from volumemanager import VolumeManager
 from db import Category, Song
 import fontlib
-import time, random
-from config import MIN_POST_GUESS_TIME, DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR, SONG_PATH
+from config import DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR, DEFAULT_COUNTDOWN_TIME
 
 
 class DisplayWindow:
-    def __init__(self, parent, countdownTime):
+    def __init__(self, parent, mediaPlayer: MediaPlayer):
         super().__init__()
         self.parent = parent
         self.ui = QtUiTools.QUiLoader().load("displaywindow.ui")
@@ -28,21 +25,15 @@ class DisplayWindow:
         self.activeSong = None
         self.activeCategory = None
         self.round = 0
-        self.mediaPlayerMode = False
+        self.alwaysShowVideo = False
         self.backgroundMovie = QMovie()
 
-        audioOutput = QAudioOutput()
-        videoOutput = QVideoWidget()
-        videoOutput.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.volumeManager = VolumeManager(audioOutput)
-        self.ui.videoLayout.addWidget(videoOutput)
+        self.mediaPlayer = mediaPlayer
+        self.mediaPlayer.songBegan.connect(self.songBegan)
+        self.mediaPlayer.songEnded.connect(self.songEnded)
+        self.ui.videoLayout.addWidget(mediaPlayer.videoOutput)
 
-        self.mediaPlayer = QMediaPlayer()
-        self.mediaPlayer.setAudioOutput(audioOutput)
-        self.mediaPlayer.setVideoOutput(videoOutput)
-        self.mediaPlayer.mediaStatusChanged.connect(self.mediaStatusChanged)
-
-        self.countdown = Countdown(self.ui.countdownLabel, countdownTime)
+        self.countdown = Countdown(self.ui.countdownLabel, DEFAULT_COUNTDOWN_TIME)
         self.countdown.countdownComplete.connect(self.reveal)
         self.countdown.countdownTransition.connect(self.transition)
         self.showCountdownPage()
@@ -70,63 +61,26 @@ class DisplayWindow:
         self.ui.countdownLabel.setFont(font)
 
 #   ~~~MEDIA PLAYER~~~
-    def play(self, song: Song):
+    def songBegan(self, song):
         if song is None:
             return
         self.activeSong = song
-        if self.mediaPlayer.isPlaying():
-            self.mediaPlayer.stop()
-            time.sleep(0.1)
-        self.mediaPlayer.setSource(QUrl.fromLocalFile(f"{SONG_PATH}//{song.fileName}"))
-        self.mediaPlayer.play()
-        self.volumeManager.softStart()
-        if not self.mediaPlayerMode:
+        self.updateDisplayInfo()
+        if self.alwaysShowVideo is False:
             self.showCountdownPage()
             self.countdown.start()
-        else:
-            self.updateDisplayInfo()
 
-    def stop(self):
-        self.mediaPlayer.stop()
-        #self.mediaPlayer.setSource(QUrl(''))   #Crashes program now, not sure why...
+    def songEnded(self):
+        self.activeSong = None
+        self.updateDisplayInfo()
         self.countdown.stop()
-        if not self.mediaPlayerMode:
+        if self.alwaysShowVideo is False:
             self.showCountdownPage()
-
-    def setMediaPlayerMode(self, enable: bool):
-        self.mediaPlayerMode = enable
-        self.showVideoPage() if enable else self.showCountdownPage()
-
-    def mediaStatusChanged(self, status: QMediaPlayer.MediaStatus):
-        if status == QMediaPlayer.LoadedMedia:
-            self.updateStartPosition(status)
-
-    def updateStartPosition(self, status):
-            if self.activeSong.startTime and self.activeSong.startTime > 0:
-                self.mediaPlayer.setPosition(self.activeSong.startTime * 1000)
-            else:
-                trackLength = int(self.mediaPlayer.duration() / 1000)
-                countdownTime = self.countdown.getTime()
-                maxStartTime = trackLength - countdownTime - MIN_POST_GUESS_TIME
-                if maxStartTime <= 0:
-                    self.mediaPlayer.setPosition(0)
-                else:
-                    self.mediaPlayer.setPosition(random.randint(0,maxStartTime) * 1000)
-
-    def setVolume(self, i):
-        self.volumeManager.setVolume(i)
-
-    def getCurrentPosition(self):
-        if self.mediaPlayer.mediaStatus() != QMediaPlayer.EndOfMedia:
-            return int(self.mediaPlayer.position() /1000)
-
-    def getTrackLength(self):
-        return int(self.mediaPlayer.duration() / 1000)
 
 
 #   ~~~COUNTDOWN CLOCK & VIDEO SCREEN STACK~~~
-    def setCountdownTime(self, time):
-        self.countdown.setTime(time, reset=not self.mediaPlayer.isPlaying())
+    def setCountdownTime(self, n):
+        self.countdown.setTime(n, reset=not self.mediaPlayer.isPlaying())
 
     def transition(self):
         self.backgroundMovie.stop()
@@ -136,7 +90,7 @@ class DisplayWindow:
 
     def reveal(self):
         self.showVideoPage()
-        self.volumeManager.enterQuietMode()
+        self.mediaPlayer.enterQuietMode()
 
     def showCountdownPage(self):
         self.ui.mainDisplay.setCurrentWidget(self.ui.countdownPage)
@@ -155,7 +109,7 @@ class DisplayWindow:
         self.updateDisplayInfo()
 
 
-#   ~~~DISPLAY~~~
+#   ~~~ROUNDS~~~
     def setFullscreen(self, enable: bool):
         if enable:
             self.ui.showFullScreen()
@@ -173,9 +127,10 @@ class DisplayWindow:
         self.updateDisplayInfo()
         return self.round
 
+#   ~~~DISPLAY~~~
     def updateDisplayInfo(self):
         text = ''
-        if self.mediaPlayerMode:
+        if self.alwaysShowVideo:
             if self.activeSong:
                 if self.activeSong.anime:
                     text = f"{self.activeSong.anime}\n"
@@ -196,6 +151,12 @@ class DisplayWindow:
             if self.round > 0:
                 text += f'Round {str(self.round)}'
         self.displayInfoLabel.setText(text)
+
+    def setAlwaysShowVideo(self, enable):
+        self.alwaysShowVideo = enable
+        if enable:
+            self.showVideoPage()
+
 
     def showCategories(self, enable: bool, categories: [Category]):
         if enable:

@@ -3,17 +3,20 @@ from PySide6 import QtUiTools
 from PySide6.QtCore import Qt, QModelIndex, QTimer
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
 from PySide6.QtGui import QIcon, QPixmap
+from mediaplayer import MediaPlayer
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
 from functools import partial
-from db import Song
-from config import RESET_ICON_PATH
+from db import Song, getCategorySongs
+from config import RESET_ICON_PATH, DEFAULT_COUNTDOWN_TIME
 
 class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
-        self.displayWindow = DisplayWindow(self, self.ui.guessTime.value())
+        self.mediaPlayer = MediaPlayer()
+        self.mediaPlayer.playbackUpdate.connect(self.updatePlaybackTime)
+        self.displayWindow = DisplayWindow(self, self.mediaPlayer)
         self.playlistManager = PlaylistManager()
 
         self.activeSongView = None
@@ -27,8 +30,7 @@ class ControlWindow(QMainWindow):
 
         self.round = 0
         self.ui.round_reset_button.setIcon(QIcon(QPixmap(RESET_ICON_PATH)))
-        self.playbackTimer = QTimer()
-        self.playbackTimer.timeout.connect(self.updatePlaybackTime)
+        self.ui.guessTime.setValue(DEFAULT_COUNTDOWN_TIME)
 
         #connections
         self.ui.categoriesListView.doubleClicked.connect(self.loadCategoryPlaylist)
@@ -54,7 +56,8 @@ class ControlWindow(QMainWindow):
 
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
         self.ui.menuShowCategories.triggered.connect(self.showCategories)
-        self.ui.media_player_mode.triggered.connect(self.mediaPlayerMode)
+        self.ui.always_show_video.triggered.connect(self.alwaysShowVideo)
+        self.ui.continuous_mode.triggered.connect(self.continuousMode)
 
         self.ui.show()
 
@@ -124,37 +127,35 @@ class ControlWindow(QMainWindow):
         pass
 
 #   ~~~MEDIA PLAYER~~~
-    def mediaPlayerMode(self):
-        self.displayWindow.setMediaPlayerMode(self.ui.media_player_mode.isChecked())
+    def continuousMode(self):
+        checked = self.ui.continuous_mode.isChecked()
+        self.mediaPlayer.setContinuousMode(checked)
+        if checked:
+            songs = self.playlistManager.getActiveCategorySongs()
+            self.mediaPlayer.setPlaylist(songs)
 
     def play(self):
         song = self.playlistManager.getActiveSong()
         if song:
-            self.displayWindow.play(song)
-            self.playbackTimer.start(1000)
+            self.mediaPlayer.play(song)
 
     def stop(self):
-        if self.playbackTimer.isActive() and self.ui.autoIncrementRounds_checkbox.isChecked():
+        if self.mediaPlayer.isPlaying() and self.ui.autoIncrementRounds_checkbox.isChecked():
             self.adjustRound(1)
-        self.displayWindow.stop()
-        self.playbackTimer.stop()
+        self.mediaPlayer.stop()
         self.ui.current_position_label.setText('0:00 / 0:00')
 
     def updateGuessTime(self, i):
         self.displayWindow.setCountdownTime(i)
 
     def updateVolume(self, position):
-        self.displayWindow.setVolume(position)
+        self.mediaPlayer.setVolume(position)
 
-    def updatePlaybackTime(self):
-        currentPos = self.displayWindow.getCurrentPosition()
-        trackLength = self.displayWindow.getTrackLength()
-        if currentPos is None:
-            self.playbackTimer.stop()
-            self.stop()
-        currentPosition = f'{int(currentPos/60)}:{int((currentPos%60)/10)}{(currentPos%60)%10}'
-        trackDuration = f'{int(trackLength/60)}:{int((trackLength%60)/10)}{(trackLength%60)%10}'
-        self.ui.current_position_label.setText(f'{currentPosition} / {trackDuration}')
+    def updatePlaybackTime(self, currentPos: int, trackLen: int):
+            currentPositionStr = f'{int(currentPos/60)}:{int((currentPos%60)/10)}{(currentPos%60)%10}'
+            trackDurationStr = f'{int(trackLen/60)}:{int((trackLen%60)/10)}{(trackLen%60)%10}'
+            self.ui.current_position_label.setText(f'{currentPositionStr} / {trackDurationStr}')
+
 
 #   ~~~ROUNDS~~~
     def resetRound(self):
@@ -210,6 +211,9 @@ class ControlWindow(QMainWindow):
     def showCategories(self):
         categories = self.playlistManager.getCategories()
         self.displayWindow.showCategories(self.ui.menuShowCategories.isChecked(), categories)
+
+    def alwaysShowVideo(self):
+        self.displayWindow.setAlwaysShowVideo(self.ui.always_show_video.isChecked())
 
 
 
