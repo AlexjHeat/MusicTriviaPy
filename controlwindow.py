@@ -1,13 +1,13 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtUiTools
-from PySide6.QtCore import Qt, QModelIndex, QTimer
+from PySide6.QtCore import Qt, QModelIndex
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
 from PySide6.QtGui import QIcon, QPixmap
 from mediaplayer import MediaPlayer
 from displaywindow import DisplayWindow
 from playlistmanager import PlaylistManager
 from functools import partial
-from db import Song, getCategorySongs
+from db import Song
 from config import RESET_ICON_PATH, DEFAULT_COUNTDOWN_TIME
 
 class ControlWindow(QMainWindow):
@@ -167,18 +167,21 @@ class ControlWindow(QMainWindow):
         self.ui.roundLabel.setText(f'Round {round}')
 
 #   ~~~UI~~~
-    def loadSongToUI(self, item: Song):
+    def loadSongToUI(self, song: Song):
         self.ui.song_group_info_display.setCurrentWidget(self.ui.songInfoPage)
-        self.ui.fileNameLabel.setText(item.fileName)
-        self.ui.songGroupEdit.setText(item.group)
-        self.ui.songAnimeEdit.setText(item.anime)
-        self.ui.songOpSpinBox.setValue(item.opNum)
-        self.ui.songTitleEdit.setText(item.title)
-        self.ui.songArtistEdit.setText(item.artist)
-        if item.startTime:
-            self.ui.songStartTimeEdit.setText(str(item.startTime))
+        self.ui.fileNameLabel.setText(song.fileName)
+        self.ui.songGroupEdit.setText(song.group)
+        self.ui.songAnimeEdit.setText(song.anime)
+        self.ui.songTitleEdit.setText(song.title)
+        self.ui.songArtistEdit.setText(song.artist)
+        if song.op:
+            self.ui.op_radbtn.setChecked(True)
         else:
-            self.ui.songStartTimeEdit.clear()
+            self.ui.ed_radbtn.setChecked(True)
+        if song.opNum:
+            self.ui.songOpSpinBox.setValue(song.opNum)
+        if song.startTime:
+            self.ui.songStartTimeEdit.setText(str(song.startTime))
 
     def loadGroupToUI(self, item: str):
         self.ui.song_group_info_display.setCurrentWidget(self.ui.groupInfoPage)
@@ -188,6 +191,7 @@ class ControlWindow(QMainWindow):
         song = Song()
         song.group = self.ui.songGroupEdit.text()
         song.anime = self.ui.songAnimeEdit.text()
+        song.op = True if self.ui.op_radbtn.isChecked() else False
         song.opNum = self.ui.songOpSpinBox.value()
         song.title = self.ui.songTitleEdit.text()
         song.artist = self.ui.songArtistEdit.text()
@@ -196,13 +200,15 @@ class ControlWindow(QMainWindow):
         return song
 
     def clearSongAndGroupInfoUI(self):
-        self.ui.group_name_edit.setText('')
-        self.ui.songGroupEdit.setText('')
-        self.ui.songAnimeEdit.setText('')
-        self.ui.songOpSpinBox.setValue(0)
-        self.ui.songTitleEdit.setText('')
-        self.ui.songArtistEdit.setText('')
-        self.ui.songStartTimeEdit.setText('')
+        self.ui.group_name_edit.clear()
+        self.ui.songGroupEdit.clear()
+        self.ui.songAnimeEdit.clear()
+        self.ui.op_radbtn.setChecked(False)
+        self.ui.ed_radbtn.setChecked(False)
+        self.ui.songOpSpinBox.clear()
+        self.ui.songTitleEdit.clear()
+        self.ui.songArtistEdit.clear()
+        self.ui.songStartTimeEdit.clear()
 
 #   ~~~DISPLAY~~~
     def fullscreen(self):

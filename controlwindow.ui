@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1004</width>
+    <width>1029</width>
     <height>600</height>
    </rect>
   </property>
@@ -129,7 +129,7 @@
         <bool>false</bool>
        </property>
        <property name="sortingEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="headerHidden">
         <bool>true</bool>
@@ -211,7 +211,7 @@
         <enum>QAbstractItemView::DragDrop</enum>
        </property>
        <property name="sortingEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="headerHidden">
         <bool>true</bool>
@@ -225,7 +225,7 @@
      <rect>
       <x>700</x>
       <y>50</y>
-      <width>257</width>
+      <width>301</width>
       <height>421</height>
      </rect>
     </property>
@@ -289,11 +289,28 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QRadioButton" name="op_radbtn">
+               <property name="text">
+                <string>OP  </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="ed_radbtn">
+               <property name="text">
+                <string>ED</string>
+               </property>
+              </widget>
+             </item>
              <item>
               <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>OP</string>
+                <string>#</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -308,7 +325,7 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_8">
+              <spacer name="horizontalSpacer_9">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -593,7 +610,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1004</width>
+     <width>1029</width>
      <height>22</height>
     </rect>
    </property>

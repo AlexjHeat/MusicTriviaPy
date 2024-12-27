@@ -19,15 +19,15 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QListView,
     QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSlider, QSpacerItem, QSpinBox,
-    QSplitter, QStackedWidget, QStatusBar, QToolButton,
-    QTreeView, QVBoxLayout, QWidget)
+    QRadioButton, QSizePolicy, QSlider, QSpacerItem,
+    QSpinBox, QSplitter, QStackedWidget, QStatusBar,
+    QToolButton, QTreeView, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1004, 600)
+        MainWindow.resize(1029, 600)
         self.menuNewGame = QAction(MainWindow)
         self.menuNewGame.setObjectName(u"menuNewGame")
         self.menuEndGame = QAction(MainWindow)
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
         self.songsInTreeView.setDragEnabled(False)
         self.songsInTreeView.setDragDropMode(QAbstractItemView.DragDrop)
         self.songsInTreeView.setUniformRowHeights(False)
-        self.songsInTreeView.setSortingEnabled(True)
+        self.songsInTreeView.setSortingEnabled(False)
         self.songsInTreeView.setHeaderHidden(True)
 
         self.treeview_layout.addWidget(self.songsInTreeView)
@@ -156,14 +156,14 @@ class Ui_MainWindow(object):
         self.songsOutTreeView.setObjectName(u"songsOutTreeView")
         self.songsOutTreeView.setDragEnabled(True)
         self.songsOutTreeView.setDragDropMode(QAbstractItemView.DragDrop)
-        self.songsOutTreeView.setSortingEnabled(True)
+        self.songsOutTreeView.setSortingEnabled(False)
         self.songsOutTreeView.setHeaderHidden(True)
 
         self.treeview_layout.addWidget(self.songsOutTreeView)
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(700, 50, 257, 421))
+        self.layoutWidget2.setGeometry(QRect(700, 50, 301, 421))
         self.song_layout = QVBoxLayout(self.layoutWidget2)
         self.song_layout.setObjectName(u"song_layout")
         self.song_layout.setContentsMargins(0, 0, 0, 0)
@@ -217,26 +217,37 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
 
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.op_radbtn = QRadioButton(self.songInfoPage)
+        self.op_radbtn.setObjectName(u"op_radbtn")
+
+        self.horizontalLayout_3.addWidget(self.op_radbtn)
+
+        self.ed_radbtn = QRadioButton(self.songInfoPage)
+        self.ed_radbtn.setObjectName(u"ed_radbtn")
+
+        self.horizontalLayout_3.addWidget(self.ed_radbtn)
+
         self.label_5 = QLabel(self.songInfoPage)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.horizontalLayout_7.addWidget(self.label_5)
+        self.horizontalLayout_3.addWidget(self.label_5)
 
         self.songOpSpinBox = QSpinBox(self.songInfoPage)
         self.songOpSpinBox.setObjectName(u"songOpSpinBox")
         sizePolicy.setHeightForWidth(self.songOpSpinBox.sizePolicy().hasHeightForWidth())
         self.songOpSpinBox.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_7.addWidget(self.songOpSpinBox)
+        self.horizontalLayout_3.addWidget(self.songOpSpinBox)
 
-        self.horizontalSpacer_8 = QSpacerItem(95, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(95, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_7.addItem(self.horizontalSpacer_8)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_9)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_7)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
@@ -414,7 +425,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1004, 22))
+        self.menubar.setGeometry(QRect(0, 0, 1029, 22))
         self.menuSongFiles = QMenu(self.menubar)
         self.menuSongFiles.setObjectName(u"menuSongFiles")
         self.menuOptions = QMenu(self.menubar)
@@ -463,7 +474,9 @@ class Ui_MainWindow(object):
         self.fileNameLabel.setText("")
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Group", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"OP", None))
+        self.op_radbtn.setText(QCoreApplication.translate("MainWindow", u"OP  ", None))
+        self.ed_radbtn.setText(QCoreApplication.translate("MainWindow", u"ED", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"#", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Title", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Artist", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
