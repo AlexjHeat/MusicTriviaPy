@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QSpinBox, QDialogButtonBox
+from PySide6.QtCore import QDate
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QSpinBox, QDialogButtonBox, QDateEdit
 from source.db import Record
 
 class RecordDialog(QtWidgets.QDialog):
@@ -12,9 +13,11 @@ class RecordDialog(QtWidgets.QDialog):
         self.setupUI()
 
     def setupUI(self):
-        #Date
-
         #Song
+
+        #Date
+        self.dateEdit = QDateEdit()
+        self.dateEdit.setDate(QDate.currentDate())
 
         #Stats
         statsLayout = QHBoxLayout()
@@ -31,17 +34,18 @@ class RecordDialog(QtWidgets.QDialog):
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
-        #
+        #Layout
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(QLabel(str(self.song), self))
+        mainLayout.addWidget(self.dateEdit)
         mainLayout.addLayout(statsLayout)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
 
 
-
     def getRecord(self):
-        return Record(  total = self.totalLineEdit.value(),
+        return Record(  date = self.dateEdit.date().toPython(),
+                        total = self.totalLineEdit.value(),
                         correct = self.correctLineEdit.value(),
                         song_id = self.song.id
                         )

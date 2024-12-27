@@ -174,7 +174,7 @@ class PlaylistManager:
         if dialog.exec() == QDialog.Accepted:
             record = dialog.getRecord()
             try:
-                db.addRecord(record)
+                db.createRecord(record)
             except sqlalchemy.exc.IntegrityError:
                 QMessageBox.critical(parent, 'Error', "Something's Fucked!")
             else:
