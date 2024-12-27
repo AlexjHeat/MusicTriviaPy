@@ -16,12 +16,13 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QListView,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QRadioButton, QSizePolicy, QSlider, QSpacerItem,
-    QSpinBox, QSplitter, QStackedWidget, QStatusBar,
-    QToolButton, QTreeView, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QListView, QMainWindow, QMenu, QMenuBar,
+    QPushButton, QRadioButton, QSizePolicy, QSlider,
+    QSpacerItem, QSpinBox, QSplitter, QStackedWidget,
+    QStatusBar, QToolButton, QTreeView, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -161,6 +162,24 @@ class Ui_MainWindow(object):
 
         self.treeview_layout.addWidget(self.songsOutTreeView)
 
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_7.addItem(self.horizontalSpacer_6)
+
+        self.add_record_btn = QPushButton(self.layoutWidget1)
+        self.add_record_btn.setObjectName(u"add_record_btn")
+
+        self.horizontalLayout_7.addWidget(self.add_record_btn)
+
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_7.addItem(self.horizontalSpacer_8)
+
+
+        self.treeview_layout.addLayout(self.horizontalLayout_7)
+
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
         self.layoutWidget2.setGeometry(QRect(700, 50, 301, 421))
@@ -177,6 +196,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.fileNameLabel = QLabel(self.songInfoPage)
         self.fileNameLabel.setObjectName(u"fileNameLabel")
+        self.fileNameLabel.setFrameShape(QFrame.Panel)
+        self.fileNameLabel.setFrameShadow(QFrame.Sunken)
 
         self.verticalLayout.addWidget(self.fileNameLabel)
 
@@ -471,6 +492,7 @@ class Ui_MainWindow(object):
         self.current_category_label.setText(QCoreApplication.translate("MainWindow", u"Current Category:", None))
         self.moveSongInButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.moveSongOutButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.add_record_btn.setText(QCoreApplication.translate("MainWindow", u"Add Record", None))
         self.fileNameLabel.setText("")
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Group", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Anime", None))

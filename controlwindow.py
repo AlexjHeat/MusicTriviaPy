@@ -44,6 +44,7 @@ class ControlWindow(QMainWindow):
         self.ui.remove_missing_songs.triggered.connect(self.removeMissingSongs)
         self.ui.moveSongInButton.released.connect(self.addSongToCategory)
         self.ui.moveSongOutButton.released.connect(self.removeSongFromCategory)
+        self.ui.add_record_btn.released.connect(self.addRecord)
 
         self.ui.round_reset_button.released.connect(self.resetRound)
         self.ui.nextRoundButton.released.connect(partial(self.adjustRound, 1))
@@ -119,6 +120,9 @@ class ControlWindow(QMainWindow):
             index = self.ui.songsInTreeView.currentIndex()
             self.playlistManager.setActiveIndex(index)
 
+    def addRecord(self):
+        self.playlistManager.addRecord(self)
+
     def scanSongFolder(self):
         self.playlistManager.scanSongFolder()
         self.loadCategoryPlaylist(self.ui.categoriesListView.currentIndex())
@@ -192,7 +196,8 @@ class ControlWindow(QMainWindow):
         song.group = self.ui.songGroupEdit.text()
         song.anime = self.ui.songAnimeEdit.text()
         song.op = True if self.ui.op_radbtn.isChecked() else False
-        song.opNum = self.ui.songOpSpinBox.value()
+        if self.ui.songOpSpinBox.value() >= 0:
+            song.opNum = self.ui.songOpSpinBox.value()
         song.title = self.ui.songTitleEdit.text()
         song.artist = self.ui.songArtistEdit.text()
         if self.ui.songStartTimeEdit.text().isnumeric():

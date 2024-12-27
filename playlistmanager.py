@@ -6,6 +6,7 @@ from enum import Enum
 from db import Session, Song, Category, updateSong, updateCategory, updateGroup, getCategorySongs
 from viewmodels import CategoryListModel, SongTreeModel
 from categorydialog import CategoryDialog
+from RecordDialog import RecordDialog
 from config import DEFAULT_CATEGORY, SONG_PATH
 import os
 
@@ -200,3 +201,21 @@ class PlaylistManager:
         self.songsOutModel.addSong(song)
         self.activeSongIndex = None
         return True
+
+#   ~~~RECORDS~~~
+    def addRecord(self, parent):
+        song = self.getActiveSong()
+        if song is None:
+            return
+        dialog = RecordDialog(song, parent)
+        if dialog.exec() == QDialog.Accepted:
+            record = dialog.getRecord()
+            session = Session()
+            try:
+                session.add(record)
+                session.commit()
+            except sqlalchemy.exc.IntegrityError:
+                QMessageBox.critical(parent, 'Error', f"Something's Fucked!")
+            else:
+                session.expunge(record)
+                return True

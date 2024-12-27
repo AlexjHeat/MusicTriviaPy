@@ -1,10 +1,11 @@
 # This Python file uses the following encoding: utf-8
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, String, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine, func
+from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, String
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from typing import List
+import datetime
 from config import DEFAULT_CATEGORY as default
 
 #initialize Base & Session objects
@@ -17,62 +18,79 @@ Session = sessionmaker(bind=engine, expire_on_commit=False)
 category_song_association = Table(
     "song_category",
     Base.metadata,
-    Column('song_id', Integer, ForeignKey('Songs.id')),
-    Column('category_name', Integer, ForeignKey('Categories.name')),
-    UniqueConstraint('song_id', 'category_name')
+    Column('song_id', Integer, ForeignKey('song.id')),
+    Column('category_id', Integer, ForeignKey('category.id')),
+    UniqueConstraint('song_id', 'category_id')
 )
 
 class Category(Base):
-    __tablename__ = "Categories"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = "category"
+    id: Mapped[int] = mapped_column(primary_key=True)
     name = Column(String, unique=True, nullable=False)
-    description = Column(String)
-    nameColor = Column(String)
-    backgroundColor = Column(String)
-    clockColor = Column(String)
-    nameFont = Column(String)
-    clockFont = Column(String)
-    clockImage = Column(String)
-    countdownBackgroundImage = Column(String)
-    videoBackgroundImage = Column(String)
-    transitionBackgroundImage = Column(String)
-    songs = relationship('Song', secondary=category_song_association, back_populates='categories')
+    description:                Mapped[str] = mapped_column(nullable=True)
+    nameColor:                  Mapped[str] = mapped_column(nullable=True)
+    backgroundColor:            Mapped[str] = mapped_column(nullable=True)
+    clockColor:                 Mapped[str] = mapped_column(nullable=True)
+    nameFont:                   Mapped[str] = mapped_column(nullable=True)
+    clockFont:                  Mapped[str] = mapped_column(nullable=True)
+    clockImage:                 Mapped[str] = mapped_column(nullable=True)
+    countdownBackgroundImage:   Mapped[str] = mapped_column(nullable=True)
+    videoBackgroundImage:       Mapped[str] = mapped_column(nullable=True)
+    transitionBackgroundImage:  Mapped[str] = mapped_column(nullable=True)
+    songs:                      Mapped[List['Song']] = relationship(secondary=category_song_association, back_populates='categories')
 
 class Song(Base):
-    __tablename__ = "Songs"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    fileName = Column(String, unique=True, nullable=False)
-    group = Column(String, default='')
-    anime = Column(String, default='')
-    opNum = Column(Integer, default=0)
-    artist = Column(String, default='')
-    title = Column(String, default='')
-    startTime = Column(Integer)
-    categories = relationship('Category', secondary=category_song_association, back_populates='songs')
-    missingFile = Column(Boolean, default=False)
+    __tablename__ = "song"
+    id:             Mapped[int] = mapped_column(primary_key=True)
+    fileName:       Mapped[str] = mapped_column(unique=True, nullable=False)
+    missingFile:    Mapped[bool] = mapped_column(default=False)
+    group:          Mapped[str] = mapped_column(nullable=True, default="")
+    anime:          Mapped[str] = mapped_column(nullable=True, default="")
+    op:             Mapped[bool] = mapped_column(nullable=True, default=True)
+    opNum:          Mapped[int] = mapped_column(nullable=True, default=0)
+    artist:         Mapped[str] = mapped_column(nullable=True, default="")
+    title:          Mapped[str] = mapped_column(nullable=True, default="")
+    startTime:      Mapped[int] = mapped_column(nullable=True, default=True)
+    difficulty:     Mapped[int] = mapped_column(nullable=True, default=0)
+    categories:     Mapped[List['Category']] = relationship(secondary=category_song_association, back_populates='songs')
+    records:        Mapped[List['Record']] = relationship(back_populates='song')
 
     def __str__(self):
         str = ""
         if self.anime:
             str = self.anime
-            if self.opNum:
-                str += f' - OP{self.opNum}'
+            if self.op:
+                if self.opNum:
+                    str += f' - OP{self.opNum}'
+            else:
+                if self.opNum:
+                    str += f' - ED{self.opNum}'
             if self.title:
                 str += f' - {self.title}'
         else:
             str = self.fileName
         return str
 
+class Record(Base):
+    __tablename__ = "record"
+    id:         Mapped[int] = mapped_column(primary_key=True)
+    date:       Mapped[datetime.datetime] = mapped_column(server_default=func.now())
+    total:      Mapped[int] = mapped_column(nullable=True)
+    correct:    Mapped[int] = mapped_column(nullable=True)
+    song:       Mapped['Song'] = relationship(back_populates='records')
+    song_id:    Mapped[int] = mapped_column(ForeignKey('song.id'))
 
 def updateSong(id, data):
         session = Session()
         song = session.query(Song).filter(Song.id == id).one()
         song.group = data.group
         song.anime = data.anime
+        song.op = data.op
         song.opNum = data.opNum
         song.title = data.title
         song.artist = data.artist
         song.startTime = data.startTime
+        song.difficulty = data.difficulty
         session.commit()
         session.close()
         return song
