@@ -2,12 +2,12 @@
 from PySide6.QtCore import QObject, QUrl, QTimer, Signal
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PySide6.QtMultimediaWidgets import QVideoWidget
-from volumemanager import VolumeManager
-from db import Song
+from source.managers.volume_manager import VolumeManager
+from source.db import Song
 from config import SONG_PATH, MIN_POST_GUESS_TIME, DEFAULT_COUNTDOWN_TIME
 import time, random
 
-class MediaPlayer(QObject):
+class MediaManager(QObject):
     playbackUpdate = Signal(int, int)
     songBegan = Signal(Song)
     songEnded = Signal()

@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore import Qt, QAbstractItemModel, QAbstractListModel, QModelIndex
-from PySide6.QtGui import QPixmap, QIcon
-from db import Song, Category
+from PySide6.QtGui import QIcon
+from source.db import Song, Category
 
 
 class CategoryListModel(QAbstractListModel):
@@ -35,7 +35,6 @@ class CategoryListModel(QAbstractListModel):
         self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
         self.categories.append(category)
         self.endInsertRows()
-
 
 class TreeNode():
     def __init__(self, data, parent=None, group=False):

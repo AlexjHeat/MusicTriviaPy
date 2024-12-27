@@ -3,7 +3,7 @@ from PySide6 import QtWidgets
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QTextEdit, QFontComboBox, QDialogButtonBox, QToolButton, QColorDialog
 from PySide6.QtGui import QColor
 from functools import partial
-from db import Category
+from source.db import Category
 from config import DEFAULT_ROUND_FONT, DEFAULT_CLOCK_FONT
 
 class CategoryDialog(QtWidgets.QDialog):

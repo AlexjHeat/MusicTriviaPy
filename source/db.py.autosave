@@ -6,7 +6,7 @@ from sqlalchemy import Table, Column, ForeignKey, UniqueConstraint, Integer, Str
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
 import datetime
-from config import DEFAULT_CATEGORY as default
+from source.config import DEFAULT_CATEGORY as default
 
 #initialize Base & Session objects
 Base = declarative_base()
@@ -80,49 +80,6 @@ class Record(Base):
     song:       Mapped['Song'] = relationship(back_populates='records')
     song_id:    Mapped[int] = mapped_column(ForeignKey('song.id'))
 
-def updateSong(id, data):
-        session = Session()
-        song = session.query(Song).filter(Song.id == id).one()
-        song.group = data.group
-        song.anime = data.anime
-        song.op = data.op
-        song.opNum = data.opNum
-        song.title = data.title
-        song.artist = data.artist
-        song.startTime = data.startTime
-        song.difficulty = data.difficulty
-        session.commit()
-        session.close()
-        return song
-
-def updateCategory(id, data):
-        session = Session()
-        category = session.query(Category).filter(Category.id == id).one()
-        category.name = data.name
-        category.description = data.description
-        category.nameColor = data.nameColor
-        category.backgroundColor = data.backgroundColor
-        category.clockColor = data.clockColor
-        category.nameFont = data.nameFont
-        category.clockFont = data.clockFont
-        session.commit()
-        session.expunge(category)
-        session.close()
-        return category
-
-def updateGroup(oldName: str, newName: str):
-    session = Session()
-    songs = session.query(Song).filter(Song.group == oldName).all()
-    for song in songs:
-        song.group = newName
-        session.commit()
-    session.close()
-
-def getCategorySongs(id: int):
-    session = Session()
-    songs = session.query(Song).filter(Song.categories.any(Category.id == id), Song.missingFile == False).all()
-    session.close()
-    return songs
 
 def createDefaultCategory():
     session = Session()

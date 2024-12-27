@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QSpinBox, QDialogButtonBox
-from db import Record
+from source.db import Record
 
 class RecordDialog(QtWidgets.QDialog):
     def __init__(self, song, parent=None):

@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
-DEFAULT_CATEGORY = "Default"
+DEFAULT_CATEGORY = "Standard"
 
 DEFAULT_COUNTDOWN_TIME = 30
 MIN_POST_GUESS_TIME = 15

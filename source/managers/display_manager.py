@@ -3,15 +3,15 @@ from PySide6 import QtUiTools
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PySide6.QtGui import QMovie, QColor
-from mediaplayer import MediaPlayer
-from countdown import Countdown
-from db import Category
-import fontlib
+from source.managers.media_manager import MediaManager
+from source.managers.countdown_manager import Countdown
+from source.db import Category
+import source.libraries.font_lib as fontlib
 from config import DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR, DEFAULT_COUNTDOWN_TIME
 
 
 class DisplayWindow:
-    def __init__(self, parent, mediaPlayer: MediaPlayer):
+    def __init__(self, parent, mediaPlayer: MediaManager):
         super().__init__()
         self.parent = parent
         self.ui = QtUiTools.QUiLoader().load("displaywindow.ui")

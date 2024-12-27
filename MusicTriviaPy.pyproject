@@ -15,6 +15,7 @@
         "playlistmanager.py",
         "volumemanager.py",
         "mediaplayer.py",
-        "RecordDialog.py"
+        "RecordDialog.py",
+        "source/db_access.py"
     ]
 }

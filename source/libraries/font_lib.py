@@ -1,9 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
 from PySide6.QtGui import  QFontDatabase, QFontInfo, QFont
-import os
-
 from config import FONT_PATH
+import os
 
 def getFont(name: str, size: int, default:str = None) -> QFont:
     font = QFont(name, size)

@@ -3,18 +3,18 @@ from PySide6 import QtUiTools
 from PySide6.QtCore import Qt, QModelIndex
 from PySide6.QtWidgets import QMainWindow, QAbstractItemView
 from PySide6.QtGui import QIcon, QPixmap
-from mediaplayer import MediaPlayer
-from displaywindow import DisplayWindow
-from playlistmanager import PlaylistManager
 from functools import partial
-from db import Song
+from source.managers.media_manager import MediaManager
+from source.managers.display_manager import DisplayWindow
+from source.managers.playlist_manager import PlaylistManager
+from source.db import Song
 from config import RESET_ICON_PATH, DEFAULT_COUNTDOWN_TIME
 
 class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
-        self.mediaPlayer = MediaPlayer()
+        self.mediaPlayer = MediaManager()
         self.mediaPlayer.playbackUpdate.connect(self.updatePlaybackTime)
         self.displayWindow = DisplayWindow(self, self.mediaPlayer)
         self.playlistManager = PlaylistManager()
