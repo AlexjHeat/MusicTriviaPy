@@ -101,6 +101,7 @@ def updateSong(id: int, data: Song):
         song.artist = data.artist
         song.startTime = data.startTime
         song.difficulty = data.difficulty
+        song.volume = data.volume
         session.commit()
         session.close()
         return song

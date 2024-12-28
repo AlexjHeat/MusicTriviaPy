@@ -52,6 +52,7 @@ class Song(Base):
     title:          Mapped[str] = mapped_column(nullable=True, default="")
     startTime:      Mapped[int] = mapped_column(nullable=True, default=0)
     difficulty:     Mapped[int] = mapped_column(nullable=True, default=0)
+    volume:         Mapped[int] = mapped_column(nullable=True, default=90)
     categories:     Mapped[List['Category']] = relationship(secondary=category_song_association, back_populates='songs')
     records:        Mapped[List['Record']] = relationship(back_populates='song')
 

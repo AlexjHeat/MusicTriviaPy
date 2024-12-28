@@ -7,12 +7,12 @@ from source.managers.media_manager import MediaManager
 from source.managers.countdown_manager import Countdown
 from source.db import Category
 import source.libraries.font_lib as fontlib
-from config import DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR, DEFAULT_COUNTDOWN_TIME
+from config import DEFAULT_CATEGORY, DEFAULT_ROUND_FONT, DEFAULT_ROUND_FONT_SIZE, DEFAULT_ROUND_COLOR, DEFAULT_CLOCK_FONT, DEFAULT_CLOCK_FONT_SIZE, DEFAULT_CLOCK_COLOR, DEFAULT_BACKGROUND_COLOR, DEFAULT_COUNTDOWN_TIME
 
 
 class DisplayWindow:
     def __init__(self, parent, mediaPlayer: MediaManager):
-        super().__init__()
+        super().__init__(),
         self.parent = parent
         self.ui = QtUiTools.QUiLoader().load("source\\displaywindow.ui")
         self.displayInfoLabel = QLabel(self.ui.backgroundImageLabel)
@@ -133,19 +133,17 @@ class DisplayWindow:
         if self.alwaysShowVideo:
             if self.activeSong:
                 if self.activeSong.anime:
-                    text = f"{self.activeSong.anime}\n"
-                    if self.activeSong.opNum > 0:
-                        text += f"OP {self.activeSong.opNum}"
-                if self.activeSong.opNum > 0:
-                    text += " - "
+                    text = f"{self.activeSong.anime}\n\n"
                 if self.activeSong.title:
-                    text += f"{self.activeSong.title}"
+                    text += f'"{self.activeSong.title}"'
+                    if self.activeSong.artist:
+                        text += f" by {self.activeSong.artist}"
 
         elif self.ui.mainDisplay.currentWidget() == self.ui.videoPage:
             if self.activeSong and self.activeSong.anime:
                 text = f'\n{self.activeSong.anime}'
         else:
-            if self.activeCategory and self.activeCategory.name != 'Default':
+            if self.activeCategory and self.activeCategory.name != DEFAULT_CATEGORY:
                 text += self.activeCategory.name
             text += '\n'
             if self.round > 0:

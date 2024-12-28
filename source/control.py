@@ -52,7 +52,7 @@ class ControlWindow(QMainWindow):
 
         self.ui.playButton.released.connect(self.play)
         self.ui.stopButton.released.connect(self.stop)
-        self.ui.volumeSlider.sliderMoved.connect(self.updateVolume)
+        self.ui.volumeSlider.valueChanged.connect(self.updateVolume)
         self.ui.guessTime.valueChanged.connect(self.updateGuessTime)
 
         self.ui.menuFullscreen.triggered.connect(self.fullscreen)
@@ -186,6 +186,7 @@ class ControlWindow(QMainWindow):
             self.ui.songOpSpinBox.setValue(song.opNum)
         if song.startTime:
             self.ui.songStartTimeEdit.setText(str(song.startTime))
+        self.ui.volumeSlider.setValue(song.volume)
 
     def loadGroupToUI(self, item: str):
         self.ui.song_group_info_display.setCurrentWidget(self.ui.groupInfoPage)
@@ -202,6 +203,7 @@ class ControlWindow(QMainWindow):
         song.artist = self.ui.songArtistEdit.text()
         if self.ui.songStartTimeEdit.text().isnumeric():
             song.startTime = int(self.ui.songStartTimeEdit.text())
+        song.volume = self.ui.volumeSlider.value()
         return song
 
     def clearSongAndGroupInfoUI(self):
@@ -210,7 +212,7 @@ class ControlWindow(QMainWindow):
         self.ui.songAnimeEdit.clear()
         self.ui.op_radbtn.setChecked(False)
         self.ui.ed_radbtn.setChecked(False)
-        self.ui.songOpSpinBox.clear()
+        self.ui.songOpSpinBox.setValue(0)
         self.ui.songTitleEdit.clear()
         self.ui.songArtistEdit.clear()
         self.ui.songStartTimeEdit.clear()
