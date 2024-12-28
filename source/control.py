@@ -13,7 +13,7 @@ from config import RESET_ICON_PATH, DEFAULT_COUNTDOWN_TIME
 class ControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.ui = QtUiTools.QUiLoader().load("controlwindow.ui")
+        self.ui = QtUiTools.QUiLoader().load("source\\controlwindow.ui")
         self.mediaPlayer = MediaManager()
         self.mediaPlayer.playbackUpdate.connect(self.updatePlaybackTime)
         self.displayWindow = DisplayWindow(self, self.mediaPlayer)

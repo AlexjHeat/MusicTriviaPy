@@ -14,7 +14,7 @@ class DisplayWindow:
     def __init__(self, parent, mediaPlayer: MediaManager):
         super().__init__()
         self.parent = parent
-        self.ui = QtUiTools.QUiLoader().load("displaywindow.ui")
+        self.ui = QtUiTools.QUiLoader().load("source\\displaywindow.ui")
         self.displayInfoLabel = QLabel(self.ui.backgroundImageLabel)
         self.displayInfoLabel.setGeometry(610, 10, 710, 220)
         self.displayInfoLabel.setAlignment(Qt.AlignCenter)
