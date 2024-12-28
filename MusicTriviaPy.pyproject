@@ -9,7 +9,7 @@
         "source/managers/display_manager.py",
         "source/displaywindow.ui",
         "source/libraries/font_lib.py",
-        "source/viewmodels.py",
+        "source/models.py",
         "main.py",
         "musictrivia.db",
         "source/managers/playlist_manager.py",
